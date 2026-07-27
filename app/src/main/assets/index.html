@@ -354,8 +354,11 @@ function createCard(item, idx) {
           <span class="material-symbols-outlined text-[16px]">stars</span>
           BEST DEAL
         </span>
+        <button class="duplicate-btn w-8 h-8 flex items-center justify-center ml-1 text-ink hover:text-ballpoint hover:scale-110 active:scale-90 transition-all" data-duplicate="${item.id}" title="Duplicate item">
+          <span class="material-symbols-outlined text-[20px]">content_copy</span>
+        </button>
         ${canRemove ? `
-        <button class="remove-btn w-8 h-8 flex items-center justify-center ml-1" data-remove="${item.id}" title="Remove item">
+        <button class="remove-btn w-8 h-8 flex items-center justify-center" data-remove="${item.id}" title="Remove item">
           <span class="material-symbols-outlined text-[24px]">close</span>
         </button>` : ''}
       </div>
@@ -461,6 +464,13 @@ function attachInputListeners() {
       removeItem(id);
     });
   });
+
+  document.querySelectorAll('[data-duplicate]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const id = parseInt(btn.currentTarget.dataset.duplicate);
+      duplicateItem(id);
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════
@@ -545,6 +555,26 @@ function removeItem(id) {
   items.forEach((item, idx) => { item.label = LABELS[idx]; });
   render();
   document.getElementById('add-item-btn').style.display = '';
+}
+
+function duplicateItem(id) {
+  const idx = items.length;
+  if (idx >= LABELS.length) return; // Reached max labels
+  
+  const original = items.find(it => it.id === id);
+  if (!original) return;
+
+  items.push({ 
+    id: nextId++, 
+    label: LABELS[idx], 
+    price: original.price, 
+    size: original.size, 
+    unit: original.unit 
+  });
+
+  // Re-render all to ensure labels and colors stay consistent
+  render();
+  document.getElementById('add-item-btn').style.display = items.length >= 10 ? 'none' : '';
 }
 
 // ═══════════════════════════════════════════════
