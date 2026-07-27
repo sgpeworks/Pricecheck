@@ -197,9 +197,9 @@
     <div class="flex items-center justify-between px-2 mt-2">
       <span class="text-lg font-bold text-graphite">Compare all prices per:</span>
       <select id="global-unit" class="bg-white border-2 border-ink rounded-[2px_8px_3px_6px] px-3 py-1.5 text-base font-hand font-bold outline-none focus:ring-2 focus:ring-accent text-ink shadow-[2px_2px_0px_#0E2A5C]">
-        <option value="1">1 unit (g / ml / day)</option>
+        <option value="1" selected>1 unit (g / ml / day)</option>
         <option value="100">100 units</option>
-        <option value="1000" selected>1000 units (1kg / 1L)</option>
+        <option value="1000">1000 units (1kg / 1L)</option>
       </select>
     </div>
 
@@ -259,7 +259,7 @@
 const LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 let items = [];
 let nextId = 0;
-let globalUnitMultiplier = 1000;
+let globalUnitMultiplier = 1;
 
 // ═══════════════════════════════════════════════
 //  Helpers
