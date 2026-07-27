@@ -467,7 +467,7 @@ function attachInputListeners() {
 
   document.querySelectorAll('[data-duplicate]').forEach(btn => {
     btn.addEventListener('click', e => {
-      const id = parseInt(btn.currentTarget.dataset.duplicate);
+      const id = parseInt(btn.dataset.duplicate);
       duplicateItem(id);
     });
   });
