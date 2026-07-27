@@ -243,17 +243,27 @@
 //  State
 // ═══════════════════════════════════════════════
 const LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-let items = [];   // { id, label, price, size, qty }
+let items = [];   // { id, label, price, size, unit }
 let nextId = 0;
 
 // ═══════════════════════════════════════════════
 //  Helpers
 // ═══════════════════════════════════════════════
-function unitPrice(item) {
+const UNIT_MULT = { g: 1, kg: 1000, ml: 1, L: 1000, pcs: 1 };
+
+function getBasePrice(item) {
   const p = parseFloat(item.price) || 0;
   const s = parseFloat(item.size)  || 0;
-  const q = parseFloat(item.qty)   || 1;
-  if (p > 0 && s > 0 && q > 0) return (p / (s * q)) * 100;
+  if (p > 0 && s > 0) {
+    return p / (s * (UNIT_MULT[item.unit] || 1));
+  }
+  return 0;
+}
+
+function getDisplayPrice(item) {
+  const p = parseFloat(item.price) || 0;
+  const s = parseFloat(item.size)  || 0;
+  if (p > 0 && s > 0) return p / s;
   return 0;
 }
 
@@ -321,7 +331,7 @@ function createCard(item, idx) {
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div class="flex flex-col gap-1">
-          <label class="text-xs text-on-surface-variant font-medium">Size (g / ml)</label>
+          <label class="text-xs text-on-surface-variant font-medium">Size</label>
           <input
             data-field="size" data-id="${item.id}"
             class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
@@ -330,13 +340,17 @@ function createCard(item, idx) {
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs text-on-surface-variant font-medium">Qty</label>
-          <input
-            data-field="qty" data-id="${item.id}"
+          <label class="text-xs text-on-surface-variant font-medium">Unit</label>
+          <select
+            data-field="unit" data-id="${item.id}"
             class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
-            type="number" inputmode="numeric" placeholder="1"
-            value="${item.qty}"
-          />
+          >
+            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
+            <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
+            <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
+            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
+            <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+          </select>
         </div>
       </div>
     </div>
@@ -344,7 +358,7 @@ function createCard(item, idx) {
     <!-- Result -->
     <div class="mt-4 pt-3 border-t border-outline-variant/30">
       <div class="flex flex-col items-center py-1">
-        <span class="text-xs text-on-surface-variant mb-1">Price per 100 units</span>
+        <span class="text-xs text-on-surface-variant mb-1" data-unit-label="${item.id}">Price per 1 ${item.unit}</span>
         <div class="result-val font-mono font-extrabold text-3xl tracking-tight text-on-surface" data-result="${item.id}">
           ₹0.00
         </div>
@@ -395,16 +409,25 @@ function attachInputListeners() {
 //  Update result displays & best-deal highlight
 // ═══════════════════════════════════════════════
 function updateResults() {
-  const values = items.map(item => ({ id: item.id, label: item.label, val: unitPrice(item) }));
+  const values = items.map(item => ({ 
+    id: item.id, 
+    label: item.label, 
+    baseVal: getBasePrice(item),
+    displayVal: getDisplayPrice(item),
+    unit: item.unit
+  }));
 
   // Update result labels
-  values.forEach(({ id, val }) => {
+  values.forEach(({ id, displayVal, unit }) => {
     const el = document.querySelector(`[data-result="${id}"]`);
-    if (el) el.textContent = formatINR(val);
+    if (el) el.textContent = formatINR(displayVal);
+    
+    const lbl = document.querySelector(`[data-unit-label="${id}"]`);
+    if (lbl) lbl.textContent = `Price per 1 ${unit}`;
   });
 
-  // Find best deal (lowest non-zero unit price)
-  const active = values.filter(v => v.val > 0);
+  // Find best deal (lowest non-zero base price)
+  const active = values.filter(v => v.baseVal > 0);
   const allCards = document.querySelectorAll('.item-card');
   allCards.forEach(c => c.classList.remove('best'));
 
@@ -412,22 +435,24 @@ function updateResults() {
   const summaryText = document.getElementById('summary-text');
 
   if (active.length >= 2) {
-    const minVal = Math.min(...active.map(v => v.val));
-    const winners = active.filter(v => v.val === minVal);
+    const minVal = Math.min(...active.map(v => v.baseVal));
+    const winners = active.filter(v => v.baseVal === minVal);
 
     winners.forEach(winner => {
       const card = document.querySelector(`.item-card[data-id="${winner.id}"]`);
       if (card) card.classList.add('best');
     });
 
-    const saving = active.length >= 2
-      ? Math.max(...active.map(v => v.val)) - minVal
-      : 0;
-
     summaryBar.classList.remove('hidden');
     summaryBar.classList.add('flex');
     const winnerLabels = winners.map(w => `Item ${w.label}`).join(' & ');
-    summaryText.textContent = `${winnerLabels} saves ₹${saving.toFixed(3)} per 100 units`;
+    
+    const savingBase = Math.max(...active.map(v => v.baseVal)) - minVal;
+    if (savingBase > 0) {
+      summaryText.textContent = `${winnerLabels} is the cheapest option!`;
+    } else {
+      summaryText.textContent = `All items have the same unit price!`;
+    }
   } else {
     summaryBar.classList.add('hidden');
     summaryBar.classList.remove('flex');
@@ -440,7 +465,7 @@ function updateResults() {
 function addItem() {
   const idx = items.length;
   if (idx >= LABELS.length) return;
-  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', qty: '1' });
+  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', unit: 'g' });
 
   // Partial re-render: just append new card
   const container = document.getElementById('items-container');
@@ -512,8 +537,8 @@ function particleBurst(el) {
 document.addEventListener('DOMContentLoaded', () => {
   // Start with A and B
   items = [
-    { id: nextId++, label: 'A', price: '', size: '', qty: '1' },
-    { id: nextId++, label: 'B', price: '', size: '', qty: '1' },
+    { id: nextId++, label: 'A', price: '', size: '', unit: 'g' },
+    { id: nextId++, label: 'B', price: '', size: '', unit: 'g' },
   ];
   render();
 
@@ -525,8 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('reset-btn').addEventListener('click', () => {
     items = [
-      { id: nextId++, label: 'A', price: '', size: '', qty: '1' },
-      { id: nextId++, label: 'B', price: '', size: '', qty: '1' },
+      { id: nextId++, label: 'A', price: '', size: '', unit: 'g' },
+      { id: nextId++, label: 'B', price: '', size: '', unit: 'g' },
     ];
     render();
     document.getElementById('add-item-btn').style.display = '';
