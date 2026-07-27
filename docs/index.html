@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>PriceCheck — Calculator</title><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-surface": "#2e3132", "error": "#ba1a1a", "error-container": "#ffdad6", "surface": "#f8f9fa", "on-surface-variant": "#3d4947", "outline-variant": "#bcc9c6", "on-primary-fixed-variant": "#005049", "primary-fixed-dim": "#6bd8cb", "secondary": "#006b5f", "on-error": "#ffffff", "surface-bright": "#f8f9fa", "secondary-container": "#62fae3", "surface-container-lowest": "#ffffff", "on-primary": "#ffffff", "tertiary-container": "#00873b", "tertiary-fixed-dim": "#4ae176", "surface-tint": "#006a61", "outline": "#6d7a77", "surface-container-highest": "#e1e3e4", "surface-variant": "#e1e3e4", "inverse-primary": "#6bd8cb", "on-background": "#191c1d", "on-tertiary-fixed": "#002109", "surface-container-high": "#e7e8e9", "tertiary-fixed": "#6bff8f", "on-tertiary": "#ffffff", "surface-container-low": "#f3f4f5", "on-tertiary-container": "#f7fff3", "on-secondary-fixed": "#00201c", "primary-fixed": "#89f5e7", "primary": "#00685f", "surface-container": "#edeeef", "tertiary": "#006b2d", "on-primary-fixed": "#00201d", "inverse-on-surface": "#f0f1f2", "on-secondary": "#ffffff", "on-tertiary-fixed-variant": "#005321", "surface-dim": "#d9dadb", "secondary-fixed": "#62fae3", "on-error-container": "#93000a", "background": "#f8f9fa", "secondary-fixed-dim": "#3cddc7", "on-surface": "#191c1d", "primary-container": "#008378", "on-primary-container": "#f4fffc", "on-secondary-container": "#007165", "on-secondary-fixed-variant": "#005047" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "xs": "4px", "margin-mobile": "16px", "base": "4px", "xl": "32px", "gutter": "12px", "md": "16px", "sm": "8px", "lg": "24px" }, "fontFamily": { "label-numeric": ["JetBrains Mono"], "price-display": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Inter"] }, "fontSize": { "label-numeric": ["16px", { "lineHeight": "20px", "fontWeight": "600" }], "price-display": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script><style>@layer base{body{overscroll-behavior:none;}.pt-safe{padding-top:env(safe-area-inset-top,0px);}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-sm"><img alt="PriceCheck Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeTbdUjosI8Wh2tqO7kUPWktRJ7lHJ2g6Z0Hgr2xQ2vFfCw23htmS3L_2NRh5x3G19J-8g8TXuXCC1hKtjLZU2vTerQ_PqYB5AtTrTLO7iw5RsXmp7NtwAYo1dXLXiGkU8E-X0NpTkjB-YyvUf5HOIOAOehrraMDE2CbQRZdm1nqDzzakW_WFUXdiwR0kfQtsnnccYCrHp3Hd6TMBuFMe39XLMPFD7dmshV7UEjZL1FFyE0zd-z3KizHjmy_EQyJtIrcahxTz-stt-"/><span class="font-headline-md text-headline-md text-primary tracking-tight">PriceCheck</span></div><div class="flex items-center gap-md"><span class="font-body-md text-body-md text-on-surface-variant">Calculator</span><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 relative w-full pt-16 pb-24 bg-surface px-margin-mobile"><div class="flex flex-col w-full gap-lg">
+<!-- Interactive Unit Calculator Header -->
+<div class="relative overflow-hidden bg-primary rounded-xl p-lg shadow-xl">
+<div class="relative z-10 flex flex-col gap-xs">
+<span class="font-body-md text-on-primary/80 uppercase tracking-wider">Smart Comparison</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary">Unit Price Master</h2>
+<p class="font-body-md text-on-primary/70">Enter details to reveal the hidden value.</p>
+</div>
+<!-- Decorative Abstract Shape -->
+<svg class="absolute right-[-20px] top-[-20px] opacity-20 text-on-primary" height="160" viewbox="0 0 100 100" width="160">
+<circle cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="20 10" stroke-width="8"></circle>
+</svg>
+</div>
+<!-- Comparison Container -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Item A Card -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-md shadow-sm transition-all duration-300 ring-2 ring-transparent" id="card-a">
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">A</div>
+<span class="font-headline-md text-headline-md text-on-surface">Item A</span>
+</div>
+<span class="hidden font-label-numeric text-label-numeric bg-tertiary text-on-tertiary px-sm py-xs rounded-full" id="badge-a">BEST DEAL</span>
+</div>
+<div class="space-y-md">
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Total Price ($)</label>
+<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="decimal" placeholder="0.00" step="0.01" type="number"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Size (g/ml)</label>
+<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" placeholder="500" type="number"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Qty</label>
+<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" type="number" value="1"/>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant/30">
+<div class="flex flex-col items-center py-sm">
+<span class="font-body-md text-on-surface-variant">Price per 100 units</span>
+<div class="font-price-display text-price-display text-on-surface" id="result-a">$0.00</div>
+</div>
+</div>
+</div>
+<!-- Item B Card -->
+<div class="flex flex-col bg-surface-container-low rounded-xl p-md shadow-sm transition-all duration-300 ring-2 ring-transparent" id="card-b">
+<div class="flex items-center justify-between mb-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant font-bold">B</div>
+<span class="font-headline-md text-headline-md text-on-surface">Item B</span>
+</div>
+<span class="hidden font-label-numeric text-label-numeric bg-tertiary text-on-tertiary px-sm py-xs rounded-full" id="badge-b">BEST DEAL</span>
+</div>
+<div class="space-y-md">
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Total Price ($)</label>
+<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="decimal" placeholder="0.00" step="0.01" type="number"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Size (g/ml)</label>
+<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" placeholder="500" type="number"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-body-md text-on-surface-variant">Qty</label>
+<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" type="number" value="1"/>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant/30">
+<div class="flex flex-col items-center py-sm">
+<span class="font-body-md text-on-surface-variant">Price per 100 units</span>
+<div class="font-price-display text-price-display text-on-surface" id="result-b">$0.00</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm mt-sm">
+<button class="flex items-center justify-center gap-sm bg-primary text-on-primary h-14 rounded-xl font-headline-md text-headline-md active:scale-95 transition-transform shadow-md" id="add-to-history">
+<span class="material-symbols-outlined">save</span>
+      Save Comparison
+    </button>
+<button class="flex items-center justify-center gap-sm bg-surface-container-highest text-on-surface-variant h-14 rounded-xl font-body-lg text-body-lg active:scale-95 transition-transform" id="reset-btn">
+<span class="material-symbols-outlined">restart_alt</span>
+      Clear All
+    </button>
+</div>
+<!-- Educational Insight Section -->
+<div class="bg-secondary-container/30 rounded-xl p-md flex gap-md items-start">
+<div class="bg-secondary p-xs rounded-lg">
+<span class="material-symbols-outlined text-on-secondary text-[20px]">lightbulb</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-headline-md text-[14px] text-on-secondary-container">Pro Tip</span>
+<p class="font-body-md text-[13px] text-on-secondary-container/80 leading-relaxed">The largest size isn't always the cheapest. Check the unit price to see the true cost of convenience.</p>
+</div>
+</div>
+<script>
+    const inputsA = document.querySelectorAll('.input-calc-a');
+    const inputsB = document.querySelectorAll('.input-calc-b');
+    const resultA = document.getElementById('result-a');
+    const resultB = document.getElementById('result-b');
+    const cardA = document.getElementById('card-a');
+    const cardB = document.getElementById('card-b');
+    const badgeA = document.getElementById('badge-a');
+    const badgeB = document.getElementById('badge-b');
+    const resetBtn = document.getElementById('reset-btn');
+
+    function calculateUnit(inputs) {
+      const price = parseFloat(inputs[0].value) || 0;
+      const size = parseFloat(inputs[1].value) || 0;
+      const qty = parseFloat(inputs[2].value) || 1;
+
+      if (price > 0 && size > 0 && qty > 0) {
+        return (price / (size * qty)) * 100;
+      }
+      return 0;
+    }
+
+    function updateDisplay() {
+      const valA = calculateUnit(inputsA);
+      const valB = calculateUnit(inputsB);
+
+      resultA.textContent = valA > 0 ? '$' + valA.toFixed(3) : '$0.00';
+      resultB.textContent = valB > 0 ? '$' + valB.toFixed(3) : '$0.00';
+
+      // Reset states
+      [cardA, cardB].forEach(c => c.classList.remove('ring-tertiary', 'bg-tertiary-container/10'));
+      [badgeA, badgeB].forEach(b => b.classList.add('hidden'));
+      [resultA, resultB].forEach(r => r.classList.replace('text-tertiary', 'text-on-surface'));
+
+      if (valA > 0 && valB > 0) {
+        if (valA < valB) {
+          cardA.classList.add('ring-tertiary', 'bg-tertiary-container/10');
+          badgeA.classList.remove('hidden');
+          resultA.classList.replace('text-on-surface', 'text-tertiary');
+        } else if (valB < valA) {
+          cardB.classList.add('ring-tertiary', 'bg-tertiary-container/10');
+          badgeB.classList.remove('hidden');
+          resultB.classList.replace('text-on-surface', 'text-tertiary');
+        }
+      }
+    }
+
+    [...inputsA, ...inputsB].forEach(input => {
+      input.addEventListener('input', updateDisplay);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      [...inputsA, ...inputsB].forEach(i => {
+        if (i.type === 'number' && i.value === '1' && i.classList.contains('w-full')) {
+           // Skip resetting qty to 1 if it's already there but just for safety
+        } else {
+           i.value = '';
+        }
+      });
+      // Set qty defaults back
+      inputsA[2].value = 1;
+      inputsB[2].value = 1;
+      updateDisplay();
+    });
+
+    // Moment of delight: particle burst on "Save"
+    document.getElementById('add-to-history').addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'fixed pointer-events-none w-2 h-2 rounded-full bg-primary z-[60]';
+        p.style.left = (rect.left + rect.width / 2) + 'px';
+        p.style.top = (rect.top + rect.height / 2) + 'px';
+        document.body.appendChild(p);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 2 + Math.random() * 4;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        let opacity = 1;
+
+        const anim = () => {
+          p.style.left = (parseFloat(p.style.left) + vx) + 'px';
+          p.style.top = (parseFloat(p.style.top) + vy) + 'px';
+          opacity -= 0.02;
+          p.style.opacity = opacity;
+          if (opacity > 0) requestAnimationFrame(anim);
+          else p.remove();
+        };
+        requestAnimationFrame(anim);
+      }
+    });
+  </script>
+</div></main><nav class="fixed bottom-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a aria-current="page" class="flex flex-col items-center justify-center gap-xs w-full h-full transition-colors text-primary" data-path="calculator" href="index.html"><span class="material-symbols-outlined">calculate</span><span class="font-body-md text-[10px]">Calculator</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="compare" href="compare.html"><span class="material-symbols-outlined">compare_arrows</span><span class="font-body-md text-[10px]">Compare</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="scanner" href="#"><span class="material-symbols-outlined">barcode_scanner</span><span class="font-body-md text-[10px]">Scanner</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="history" href="#"><span class="material-symbols-outlined">history</span><span class="font-body-md text-[10px]">History</span></a></div></nav></body></html>
