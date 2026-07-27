@@ -216,7 +216,7 @@
     </div>
 
     <!-- Items Container -->
-    <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2 items-start"></div>
+    <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 items-start"></div>
 
     <!-- Add Item Button -->
     <button id="add-item-btn" class="add-item-btn w-full h-10 flex items-center justify-center gap-2 font-bold text-sm mt-2">
@@ -338,90 +338,90 @@ function createCard(item, idx) {
   const rotateClass = idx % 2 === 0 ? 'rotate-1' : '-rotate-1';
 
   const card = document.createElement('div');
-  card.className = `item-card flex flex-col p-5 card-appear transform ${rotateClass}`;
+  card.className = `item-card flex flex-col p-2 sm:p-3 card-appear transform ${rotateClass}`;
   card.dataset.id = item.id;
 
   card.innerHTML = `
     <!-- Card Header -->
-    <div class="flex items-center justify-between mb-5 relative">
-      <div class="flex items-center gap-3 z-10">
-        <div class="w-10 h-10 rounded-full border-2 border-ink ${pal.bg} flex items-center justify-center font-bold text-xl ${pal.text} shadow-[2px_2px_0px_#0E2A5C]">
+    <div class="flex items-center justify-between mb-2 relative">
+      <div class="flex items-center gap-2 z-10">
+        <div class="w-7 h-7 rounded-full border-2 border-ink ${pal.bg} flex items-center justify-center font-bold text-sm ${pal.text} shadow-[2px_2px_0px_#0E2A5C]">
           ${item.label}
         </div>
-        <span class="font-bold text-lg text-ink">Item ${item.label}</span>
+        <span class="font-bold text-sm sm:text-base text-ink">Item ${item.label}</span>
       </div>
-      <div class="flex items-center gap-2 z-10">
-        <span class="best-badge items-center gap-1 font-bold text-sm bg-accent text-white px-3 py-1 border-2 border-ink rounded-[4px_8px_3px_6px] shadow-[2px_2px_0px_#0E2A5C] badge-pop transform rotate-3">
-          <span class="material-symbols-outlined text-[16px]">stars</span>
-          BEST DEAL
+      <div class="flex items-center gap-1 z-10">
+        <span class="best-badge items-center gap-1 font-bold text-[10px] sm:text-xs bg-accent text-white px-2 py-0.5 border-2 border-ink rounded-[4px_8px_3px_6px] shadow-[2px_2px_0px_#0E2A5C] badge-pop transform rotate-3">
+          <span class="material-symbols-outlined text-[14px]">stars</span>
+          BEST
         </span>
-        <button class="duplicate-btn w-8 h-8 flex items-center justify-center ml-1 text-ink hover:text-ballpoint hover:scale-110 active:scale-90 transition-all" data-duplicate="${item.id}" title="Duplicate item">
-          <span class="material-symbols-outlined text-[20px]">content_copy</span>
+        <button class="duplicate-btn w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center text-ink hover:text-ballpoint hover:scale-110 active:scale-90 transition-all" data-duplicate="${item.id}" title="Duplicate item">
+          <span class="material-symbols-outlined text-[16px] sm:text-[20px]">content_copy</span>
         </button>
         ${canRemove ? `
-        <button class="remove-btn w-8 h-8 flex items-center justify-center" data-remove="${item.id}" title="Remove item">
-          <span class="material-symbols-outlined text-[24px]">close</span>
+        <button class="remove-btn w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center" data-remove="${item.id}" title="Remove item">
+          <span class="material-symbols-outlined text-[18px] sm:text-[24px]">close</span>
         </button>` : ''}
       </div>
       
       <!-- Tape effect -->
-      <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-20 h-6 bg-white/60 border-x-2 border-dashed border-ink/20 transform rotate-[-4deg]"></div>
+      <div class="hidden sm:block absolute -top-5 left-1/2 -translate-x-1/2 w-16 h-4 bg-white/60 border-x-2 border-dashed border-ink/20 transform rotate-[-4deg]"></div>
     </div>
 
     <!-- Inputs -->
-    <div class="grid grid-cols-3 gap-3 relative z-10">
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-graphite font-bold">Price (₹)</label>
+    <div class="grid grid-cols-3 gap-2 relative z-10">
+      <div class="flex flex-col gap-0">
+        <label class="text-[10px] text-graphite font-bold">Price (₹)</label>
         <div class="relative">
-          <span class="absolute left-2 top-1/2 -translate-y-1/2 text-ink font-mono font-bold text-sm">₹</span>
+          <span class="absolute left-2 top-1/2 -translate-y-1/2 text-ink font-mono font-bold text-xs">₹</span>
           <input
             data-field="price" data-id="${item.id}"
-            class="calc-input w-full h-12 pl-6 pr-2 font-mono font-bold text-sm outline-none focus:ring-2 focus:ring-accent"
+            class="calc-input w-full h-8 pl-5 pr-1 font-mono font-bold text-xs outline-none focus:ring-2 focus:ring-accent"
             type="number" inputmode="decimal" placeholder="0" step="0.01"
             value="${item.price}"
           />
         </div>
       </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-graphite font-bold">Size</label>
+      <div class="flex flex-col gap-0">
+        <label class="text-[10px] text-graphite font-bold">Size</label>
         <input
           data-field="size" data-id="${item.id}"
-          class="calc-input w-full h-12 px-2 font-mono font-bold text-sm outline-none focus:ring-2 focus:ring-accent"
+          class="calc-input w-full h-8 px-1 font-mono font-bold text-xs outline-none focus:ring-2 focus:ring-accent"
           type="number" inputmode="numeric" placeholder="500"
           value="${item.size}"
         />
       </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-graphite font-bold">Unit</label>
+      <div class="flex flex-col gap-0">
+        <label class="text-[10px] text-graphite font-bold">Unit</label>
         <select
           data-field="unit" data-id="${item.id}"
-          class="calc-input w-full h-12 px-1 font-hand font-bold text-sm outline-none focus:ring-2 focus:ring-accent"
+          class="calc-input w-full h-8 px-0 font-hand font-bold text-xs outline-none focus:ring-2 focus:ring-accent"
         >
           <optgroup label="Weight/Vol">
-            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
+            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>g</option>
             <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
             <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
-            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
+            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>L</option>
           </optgroup>
           <optgroup label="Time">
             <option value="day" ${item.unit === 'day' ? 'selected' : ''}>Day</option>
-            <option value="month" ${item.unit === 'month' ? 'selected' : ''}>Month</option>
-            <option value="year" ${item.unit === 'year' ? 'selected' : ''}>Year</option>
+            <option value="month" ${item.unit === 'month' ? 'selected' : ''}>Mth</option>
+            <option value="year" ${item.unit === 'year' ? 'selected' : ''}>Yr</option>
           </optgroup>
           <optgroup label="Other">
             <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
             <option value="pack" ${item.unit === 'pack' ? 'selected' : ''}>pack</option>
-            <option value="m" ${item.unit === 'm' ? 'selected' : ''}>meter (m)</option>
+            <option value="m" ${item.unit === 'm' ? 'selected' : ''}>m</option>
           </optgroup>
         </select>
       </div>
     </div>
 
     <!-- Result -->
-    <div class="mt-5 pt-3 border-t-2 border-dashed border-ink/30 relative z-10">
-      <div class="flex flex-col items-center py-1">
-        <span class="text-sm text-graphite font-bold mb-1" data-unit-label="${item.id}">Price per 1 ${item.unit}</span>
-        <div class="result-val font-mono font-extrabold text-3xl tracking-tight text-ink" data-result="${item.id}">
+    <div class="mt-2 pt-1 border-t-2 border-dashed border-ink/30 relative z-10">
+      <div class="flex flex-col items-center">
+        <span class="text-[10px] text-graphite font-bold mb-0" data-unit-label="${item.id}">Price per 1 ${item.unit}</span>
+        <div class="result-val font-mono font-extrabold text-xl tracking-tight text-ink" data-result="${item.id}">
           ₹0.00
         </div>
       </div>
@@ -631,10 +631,24 @@ function particleBurst(el) {
 //  Init
 // ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  items = [
-    { id: nextId++, label: 'A', price: '', size: '', unit: 'L' },
-    { id: nextId++, label: 'B', price: '', size: '', unit: 'ml' },
-  ];
+  const loadData = localStorage.getItem('pricecheck_load_items');
+  if (loadData) {
+    try {
+      const data = JSON.parse(loadData);
+      items = data.items || [];
+      globalUnitMultiplier = data.globalUnitMultiplier || 1;
+      document.getElementById('global-unit').value = globalUnitMultiplier;
+      nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 0;
+    } catch (e) { console.error(e); }
+    localStorage.removeItem('pricecheck_load_items');
+  } 
+  
+  if (!items || items.length === 0) {
+    items = [
+      { id: nextId++, label: 'A', price: '', size: '', unit: 'L' },
+      { id: nextId++, label: 'B', price: '', size: '', unit: 'ml' },
+    ];
+  }
   render();
 
   document.getElementById('global-unit').addEventListener('change', e => {

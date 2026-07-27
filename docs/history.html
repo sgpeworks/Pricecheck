@@ -200,7 +200,7 @@
       const minVal = Math.min(...values.map(v => v.baseVal));
 
       const card = document.createElement('div');
-      card.className = 'history-card transform ' + (index % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]');
+      card.className = 'history-card cursor-pointer hover:bg-[#EAE5D9] transform ' + (index % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]');
       
       let itemsHtml = session.items.map(it => {
         const base = getBasePrice(it);
@@ -231,6 +231,16 @@
           ${itemsHtml}
         </div>
       `;
+      
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.delete-btn')) return;
+        localStorage.setItem('pricecheck_load_items', JSON.stringify({
+          globalUnitMultiplier: session.globalUnitMultiplier,
+          items: session.items
+        }));
+        window.location.href = 'index.html';
+      });
+      
       container.appendChild(card);
     });
 
