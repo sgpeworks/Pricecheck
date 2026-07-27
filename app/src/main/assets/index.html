@@ -173,9 +173,9 @@
     </div>
     <div class="flex items-center gap-3">
       <span class="text-base text-graphite hidden sm:block font-hand font-bold">Calculator</span>
-      <div class="w-8 h-8 rounded-full border-2 border-ink bg-white flex items-center justify-center shadow-[2px_2px_0px_#0E2A5C]">
-        <span class="material-symbols-outlined text-ink text-[18px]">person</span>
-      </div>
+      <button id="info-btn" class="w-8 h-8 rounded-full border-2 border-ink bg-white flex items-center justify-center shadow-[2px_2px_0px_#0E2A5C] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_#0E2A5C] active:translate-y-0 active:shadow-[1px_1px_0px_#0E2A5C] transition-all cursor-pointer">
+        <span class="material-symbols-outlined text-ink text-[18px]">info</span>
+      </button>
     </div>
   </div>
 </header>
@@ -266,6 +266,51 @@
     </a>
   </div>
 </nav>
+
+<!-- ═══════════════════════ INFO MODAL ═══════════════════════ -->
+<div id="info-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-ink/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
+  <div class="bg-[#F4F1EA] border-4 border-[#0E2A5C] rounded-[4px_12px_6px_14px] shadow-[6px_6px_0px_rgba(14,42,92,0.15)] w-full max-w-md max-h-[85vh] overflow-y-auto transform scale-95 transition-transform duration-300 flex flex-col relative" id="info-modal-content">
+    
+    <!-- Close button -->
+    <button id="close-info-btn" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-ink hover:text-accent transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-2xl">close</span>
+    </button>
+    
+    <div class="p-6 flex flex-col gap-5">
+      <div class="flex items-center gap-3 border-b-2 border-ink pb-3">
+        <span class="material-symbols-outlined text-accent text-3xl">info</span>
+        <h2 class="text-2xl font-bold text-ink">About PriceCheck</h2>
+      </div>
+      
+      <div>
+        <h3 class="font-bold text-lg text-ink mb-2">How it works</h3>
+        <ol class="list-decimal pl-5 space-y-1 text-graphite font-bold text-sm">
+          <li>Add products you want to compare.</li>
+          <li>Enter the Price, Size, and Unit for each.</li>
+          <li>Look for the <span class="bg-accent text-white px-1 border border-ink rounded mx-1 text-[10px]">BEST</span> badge to instantly see the cheapest unit price!</li>
+        </ol>
+      </div>
+
+      <div class="bg-white border-2 border-ink p-3 rounded-[2px_10px_4px_8px] shadow-[2px_2px_0px_#0E2A5C] transform rotate-1">
+        <h3 class="font-bold text-base text-ink flex items-center gap-2 mb-2">
+          <span class="material-symbols-outlined text-accent text-[20px]">install_mobile</span> Install App (PWA)
+        </h3>
+        <p class="text-xs text-graphite mb-2 leading-relaxed">This is a Progressive Web App. You can install it directly from your browser to use offline!</p>
+        
+        <div class="text-xs text-graphite space-y-2 leading-relaxed">
+          <p><strong>Mobile:</strong> Tap your browser menu (<span class="material-symbols-outlined text-[14px] align-middle">more_vert</span> or <span class="material-symbols-outlined text-[14px] align-middle">ios_share</span>) and select <strong>Add to Home screen</strong>.</p>
+          <p><strong>PC/Desktop:</strong> Click the Install icon (<span class="material-symbols-outlined text-[14px] align-middle">install_desktop</span>) in your browser's address bar.</p>
+        </div>
+      </div>
+      
+      <div class="flex flex-col items-center gap-2 pt-2 border-t-2 border-ink/20">
+        <a href="https://github.com/sgpeworks/Pricecheck/releases" target="_blank" class="w-full flex items-center justify-center gap-2 bg-ink text-white font-bold text-sm py-3 px-4 border-2 border-ink rounded-[4px_12px_6px_14px] shadow-[4px_4px_0px_rgba(209,40,40,0.3)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_rgba(209,40,40,0.3)] active:translate-y-0 active:shadow-[2px_2px_0px_rgba(209,40,40,0.3)] transition-all">
+          <span class="material-symbols-outlined">android</span> Download Android APK
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════
@@ -671,6 +716,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('nav-add-btn').addEventListener('click', addItem);
+  
+  // Info Modal Logic
+  const infoBtn = document.getElementById('info-btn');
+  const infoModal = document.getElementById('info-modal');
+  const closeInfoBtn = document.getElementById('close-info-btn');
+  const infoModalContent = document.getElementById('info-modal-content');
+
+  function openInfoModal() {
+    infoModal.classList.remove('hidden');
+    infoModal.classList.add('flex');
+    setTimeout(() => {
+      infoModal.classList.remove('opacity-0');
+      infoModalContent.classList.remove('scale-95');
+      infoModalContent.classList.add('scale-100');
+    }, 10);
+  }
+
+  function closeInfoModal() {
+    infoModal.classList.add('opacity-0');
+    infoModalContent.classList.remove('scale-100');
+    infoModalContent.classList.add('scale-95');
+    setTimeout(() => {
+      infoModal.classList.add('hidden');
+      infoModal.classList.remove('flex');
+    }, 300);
+  }
+
+  infoBtn.addEventListener('click', openInfoModal);
+  closeInfoBtn.addEventListener('click', closeInfoModal);
+  infoModal.addEventListener('click', e => {
+    if (e.target === infoModal) closeInfoModal();
+  });
 
   document.getElementById('save-btn').addEventListener('click', function () {
     syncState();
