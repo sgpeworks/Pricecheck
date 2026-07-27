@@ -8,8 +8,8 @@
   "description": "Smart Unit Price Comparison",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/sgpeworks/Pricecheck/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
-      "sizes": "192x192",
+      "src": "./icon.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
