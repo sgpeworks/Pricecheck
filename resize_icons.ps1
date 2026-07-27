@@ -1,6 +1,6 @@
 Add-Type -AssemblyName System.Drawing
 
-$sourcePath = "C:\Users\Ritesh\.gemini\antigravity\brain\ccab27f3-4d56-4e42-bdd2-4e0a78e4ab17\refined_cart_icon_1785173648701.png"
+$sourcePath = "c:\Users\Ritesh\Music\price checker\source_icon.png"
 $baseDir = "c:\Users\Ritesh\Music\price checker"
 
 function Resize-Image {
