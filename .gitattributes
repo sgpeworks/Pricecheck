@@ -1,0 +1,10 @@
+# Enforce LF for shell scripts (important for CI runners on Linux)
+gradlew        text eol=lf
+*.sh           text eol=lf
+
+# Windows batch files use CRLF
+*.bat          text eol=crlf
+gradlew.bat    text eol=crlf
+
+# Default: auto-normalize
+*              text=auto
