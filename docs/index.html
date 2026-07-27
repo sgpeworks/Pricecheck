@@ -197,8 +197,8 @@
     <div class="flex items-center justify-between px-2 mt-2">
       <span class="text-lg font-bold text-graphite">Compare all prices per:</span>
       <select id="global-unit" class="bg-white border-2 border-ink rounded-[2px_8px_3px_6px] px-3 py-1.5 text-base font-hand font-bold outline-none focus:ring-2 focus:ring-accent text-ink shadow-[2px_2px_0px_#0E2A5C]">
-        <option value="1">1 unit (g / ml)</option>
-        <option value="100">100 units (100g / 100ml)</option>
+        <option value="1">1 unit (g / ml / day)</option>
+        <option value="100">100 units</option>
         <option value="1000" selected>1000 units (1kg / 1L)</option>
       </select>
     </div>
@@ -272,7 +272,13 @@ let globalUnitMultiplier = 1000;
 // ═══════════════════════════════════════════════
 //  Helpers
 // ═══════════════════════════════════════════════
-const UNIT_MULT = { g: 1, kg: 1000, ml: 1, L: 1000, pcs: 1 };
+const UNIT_MULT = { 
+  g: 1, kg: 1000, 
+  ml: 1, L: 1000, 
+  pcs: 1, pack: 1, 
+  cm: 1, m: 100,
+  day: 1, month: 30, year: 365 
+};
 
 function getBasePrice(item) {
   const p = parseFloat(item.price) || 0;
@@ -290,20 +296,28 @@ function getDisplayInfo(item) {
   const val = basePrice * globalUnitMultiplier;
   const isWeight = ['g', 'kg'].includes(item.unit);
   const isVol = ['ml', 'L'].includes(item.unit);
+  const isTime = ['day', 'month', 'year'].includes(item.unit);
+  const isLength = ['cm', 'm'].includes(item.unit);
   
   let label = '';
   if (globalUnitMultiplier === 1000) {
     if (isWeight) label = 'Price per 1 kg';
     else if (isVol) label = 'Price per 1 L';
-    else label = 'Price per 1000 pcs';
+    else if (isTime) label = 'Price per 1000 days';
+    else if (isLength) label = 'Price per 10 m';
+    else label = `Price per 1000 ${item.unit}`;
   } else if (globalUnitMultiplier === 100) {
     if (isWeight) label = 'Price per 100 g';
     else if (isVol) label = 'Price per 100 ml';
-    else label = 'Price per 100 pcs';
+    else if (isTime) label = 'Price per 100 days';
+    else if (isLength) label = 'Price per 1 m';
+    else label = `Price per 100 ${item.unit}`;
   } else {
     if (isWeight) label = 'Price per 1 g';
     else if (isVol) label = 'Price per 1 ml';
-    else label = 'Price per 1 pc';
+    else if (isTime) label = 'Price per 1 day';
+    else if (isLength) label = 'Price per 1 cm';
+    else label = `Price per 1 ${item.unit}`;
   }
   return { val, label };
 }
@@ -387,11 +401,22 @@ function createCard(item, idx) {
           data-field="unit" data-id="${item.id}"
           class="calc-input w-full h-12 px-1 font-hand font-bold text-lg outline-none focus:ring-2 focus:ring-accent"
         >
-          <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
-          <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
-          <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
-          <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
-          <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+          <optgroup label="Weight/Vol">
+            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
+            <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
+            <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
+            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
+          </optgroup>
+          <optgroup label="Time">
+            <option value="day" ${item.unit === 'day' ? 'selected' : ''}>Day</option>
+            <option value="month" ${item.unit === 'month' ? 'selected' : ''}>Month</option>
+            <option value="year" ${item.unit === 'year' ? 'selected' : ''}>Year</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+            <option value="pack" ${item.unit === 'pack' ? 'selected' : ''}>pack</option>
+            <option value="m" ${item.unit === 'm' ? 'selected' : ''}>meter (m)</option>
+          </optgroup>
         </select>
       </div>
     </div>
