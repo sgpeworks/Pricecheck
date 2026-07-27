@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hand-Drawn Sketch-Note Landing Page</title>
+  <meta name="description" content="Casual and fun design landing page with a notebook paper background and sketch style.">
+  
+  <!-- SEO & Open Graph Meta Tags -->
+  <meta property="og:title" content="Hand-Drawn Sketch-Note Landing Page">
+  <meta property="og:description" content="Casual and fun design landing page with a notebook paper background and sketch style.">
+  <meta property="og:type" content="website">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#F4F1EA',
+            ink: '#0E2A5C',
+            accent: '#D12828',
+            graphite: '#333333',
+            highlighter: '#FFFFA5',
+            ballpoint: '#0000FF'
+          },
+          fontFamily: {
+            hand: ['"Patrick Hand"', 'cursive'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Base Styles */
+    body {
+      background-color: #F4F1EA;
+      color: #0E2A5C;
+      font-family: 'Patrick Hand', cursive;
+      background-image: linear-gradient(#ccc 1px, transparent 1px);
+      background-size: 100% 1.6rem;
+      line-height: 1.6rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Matte paper grain effect */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+    
+    /* Spiral Binding */
+    .spiral-binding {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 100%;
+      border-right: 2px solid rgba(204,204,204,0.5);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-top: 24px;
+      pointer-events: none;
+    }
+    .spiral-hole {
+      width: 16px;
+      height: 16px;
+      background-color: #333;
+      border-radius: 50%;
+      margin-left: 12px;
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .spiral-ring {
+      position: absolute;
+      width: 24px;
+      height: 8px;
+      border: 3px solid #888;
+      border-radius: 12px;
+      top: 50%;
+      left: -18px;
+      transform: translateY(-50%) rotate(-15deg);
+      border-right-color: transparent;
+      box-shadow: -1px 2px 2px rgba(0,0,0,0.2);
+    }
+    
+    /* Buttons */
+    .btn-primary {
+      background-color: #F4F1EA;
+      color: #0E2A5C;
+      border: 3px solid #0E2A5C;
+      border-radius: 2px 10px 3px 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      position: relative;
+      transition: all 0.2s ease-out;
+      box-shadow: 4px 4px 0px #0E2A5C;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #0E2A5C;
+      background-color: #FFFFA5;
+    }
+    .btn-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #0E2A5C;
+    }
+
+    .btn-accent {
+      background-color: #D12828;
+      color: #F4F1EA;
+      border: 3px solid #0E2A5C;
+      border-radius: 8px 3px 10px 4px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      position: relative;
+      transition: all 0.2s ease-out;
+      box-shadow: 4px 4px 0px #0E2A5C;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-accent:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #0E2A5C;
+      background-color: #b52222;
+    }
+    .btn-accent:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #0E2A5C;
+    }
+
+    /* Cards */
+    .sketch-card {
+      background-color: #F4F1EA;
+      border: 3px solid #0E2A5C;
+      border-radius: 4px 12px 6px 14px;
+      padding: 2rem;
+      box-shadow: 6px 6px 0px rgba(14,42,92,0.15);
+      transition: all 0.2s ease-out;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .sketch-card:hover {
+      transform: translateY(-4px) rotate(1deg);
+      box-shadow: 8px 8px 0px rgba(14,42,92,0.25);
+    }
+    
+    /* Tape Effect */
+    .tape {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      width: 100px;
+      height: 24px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-left: 2px dashed rgba(0,0,0,0.15);
+      border-right: 2px dashed rgba(0,0,0,0.15);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    .tape-corner {
+      top: -10px;
+      left: -10px;
+      transform: rotate(-45deg);
+      width: 80px;
+    }
+    
+    /* Scribble Underline */
+    .scribble-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .scribble-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q10,0 20,5 T40,7 T60,3 T80,5 T100,5' fill='none' stroke='%23D12828' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 100% 100%;
+    }
+    
+    /* Coffee Stain */
+    .coffee-stain {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%238B5A2B' stroke-width='2' opacity='0.25' stroke-dasharray='10 2 5 2'/%3E%3Ccircle cx='48' cy='52' r='40' fill='none' stroke='%238B5A2B' stroke-width='3' opacity='0.15'/%3E%3C/svg%3E") no-repeat;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    /* Highlighter */
+    .highlighter {
+      background: linear-gradient(104deg, transparent 1%, #FFFFA5 2%, #FFFFA5 98%, transparent 99%);
+      padding: 0 6px;
+      border-radius: 3px;
+    }
+    
+    /* Doodle Arrow */
+    .doodle-arrow {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,80 Q50,20 80,40 M70,25 L82,42 L60,50' fill='none' stroke='%230000FF' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-[100dvh]">
+
+  <!-- Spiral Binding (Desktop Only) -->
+  <div class="spiral-binding hidden lg:flex" id="spiral">
+    <!-- Generated by JS -->
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:pl-24 py-6 relative z-10">
+    
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center mb-20 relative z-50">
+      <div class="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
+        <div class="w-10 h-10 border-2 border-ink rounded bg-paper flex items-center justify-center transform -rotate-3 shadow-[2px_2px_0px_#0E2A5C]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+        </div>
+        <span class="text-3xl font-bold tracking-tight text-ink">SketchNote</span>
+      </div>
+      <div class="hidden md:flex gap-8 text-xl font-medium">
+        <a href="#features" class="hover:text-accent transition-colors relative group">
+          Features
+          <span class="absolute -bottom-2 left-0 w-0 h-2 bg-[url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 10\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M0,5 Q10,0 20,5 T40,7 T60,3 T80,5 T100,5\' fill=\'none\' stroke=\'%23D12828\' stroke-width=\'3\' stroke-linecap=\'round\'/%3E%3C/svg%3E')] bg-[length:100%_100%] transition-all group-hover:w-full"></span>
+        </a>
+        <a href="#testimonials" class="hover:text-accent transition-colors relative group">
+          Wall of Love
+          <span class="absolute -bottom-2 left-0 w-0 h-2 bg-[url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 10\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M0,5 Q10,0 20,5 T40,7 T60,3 T80,5 T100,5\' fill=\'none\' stroke=\'%23D12828\' stroke-width=\'3\' stroke-linecap=\'round\'/%3E%3C/svg%3E')] bg-[length:100%_100%] transition-all group-hover:w-full"></span>
+        </a>
+        <a href="#pricing" class="hover:text-accent transition-colors relative group">
+          Pricing
+          <span class="absolute -bottom-2 left-0 w-0 h-2 bg-[url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 10\' preserveAspectRatio=\'none\'%3E%3Cpath d=\'M0,5 Q10,0 20,5 T40,7 T60,3 T80,5 T100,5\' fill=\'none\' stroke=\'%23D12828\' stroke-width=\'3\' stroke-linecap=\'round\'/%3E%3C/svg%3E')] bg-[length:100%_100%] transition-all group-hover:w-full"></span>
+        </a>
+      </div>
+      <button class="btn-primary text-xl hidden sm:flex">Log In</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex flex-col md:flex-row items-center justify-between gap-12 mt-12 mb-32">
+      <div class="coffee-stain -top-16 -left-16 transform -rotate-12 hidden md:block"></div>
+      
+      <div class="flex-1 w-full max-w-2xl relative z-10">
+        <h1 class="text-5xl md:text-6xl lg:text-[4rem] font-bold leading-[1.1] mb-6">
+          Your ideas <br>
+          <span class="scribble-underline text-ink">don't need to be perfect.</span> <br>
+          <span class="text-accent mt-2 block">They need to be yours.</span>
+        </h1>
+        <p class="text-2xl text-graphite mb-10 max-w-xl">
+          SketchNote is the digital canvas that feels like <span class="highlighter">real paper</span>. 
+          Stop obsessing over alignment and start capturing pure thought.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 relative">
+          <button class="btn-accent text-2xl">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+            Start Doodling
+          </button>
+          <button class="btn-primary text-2xl">See Examples</button>
+          <div class="doodle-arrow hidden lg:block" style="top: 20px; right: -60px; transform: rotate(50deg) scale(0.8);"></div>
+        </div>
+      </div>
+      
+      <div class="flex-1 w-full relative h-[400px]">
+        <!-- 3D/Abstract Visual Element -->
+        <div class="absolute inset-0 border-4 border-ink rounded-lg bg-paper shadow-[12px_12px_0px_#0E2A5C] transform rotate-3 flex flex-col items-center justify-center p-8 transition-transform hover:rotate-1 duration-300">
+          <div class="tape tape-corner"></div>
+          <div class="tape" style="bottom: -15px; right: 20%; transform: rotate(3deg); top: auto;"></div>
+          
+          <svg class="w-full h-full text-ink" viewBox="0 0 200 150" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="20" width="50" height="30" rx="4" class="fill-paper" />
+            <text x="25" y="40" font-family="'Patrick Hand'" font-size="14" stroke="none" fill="#0E2A5C">Idea!</text>
+            
+            <path d="M 60 35 C 90 35, 80 80, 120 80" stroke-dasharray="4 4" />
+            <polygon points="115,75 125,80 115,85" fill="currentColor" />
+            
+            <circle cx="150" cy="80" r="25" class="fill-paper" />
+            <text x="132" y="85" font-family="'Patrick Hand'" font-size="14" stroke="none" fill="#0E2A5C">Launch</text>
+            
+            <path d="M 35 50 L 35 100" />
+            <polygon points="30,95 35,105 40,95" fill="currentColor" />
+            
+            <rect x="10" y="105" width="50" height="30" stroke="#D12828" class="fill-paper" />
+            <text x="22" y="125" font-family="'Patrick Hand'" font-size="14" stroke="none" fill="#D12828">Fail?</text>
+            
+            <!-- Stick figure -->
+            <circle cx="160" cy="25" r="8" />
+            <line x1="160" y1="33" x2="160" y2="55" />
+            <line x1="160" y1="40" x2="145" y2="30" />
+            <line x1="160" y1="40" x2="175" y2="45" />
+            <line x1="160" y1="55" x2="150" y2="70" />
+            <line x1="160" y1="55" x2="170" y2="70" />
+            
+            <!-- Speech bubble -->
+            <path d="M 115 15 C 115 5, 140 5, 140 15 C 140 25, 115 25, 115 15 Z" stroke="#0000FF" class="fill-paper" />
+            <path d="M 115 15 L 135 30" stroke="#0000FF" />
+            <text x="120" y="18" font-family="'Patrick Hand'" font-size="10" stroke="none" fill="#0000FF">aha!</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="mb-32">
+      <div class="text-center mb-16 relative">
+        <h2 class="text-4xl md:text-5xl font-bold inline-block relative">
+          Why doodle with us?
+          <svg class="absolute -bottom-4 left-0 w-full h-4" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q50,10 100,5" fill="none" stroke="#0000FF" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </h2>
+      </div>
+      
+      <!-- Asymmetric Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <!-- Feature 1 -->
+        <div class="sketch-card md:col-span-7 transform -rotate-1">
+          <div class="tape" style="top: -12px; right: 20%; left: auto; transform: rotate(4deg);"></div>
+          <div class="w-14 h-14 border-2 border-ink rounded-full flex items-center justify-center mb-4 bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </div>
+          <h3 class="text-3xl font-bold mb-3">No boundaries</h3>
+          <p class="text-xl text-graphite">Infinite canvas means infinite possibilities. Zoom out, pan around, and let your thoughts sprawl. The white space is yours to conquer.</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="sketch-card md:col-span-5 transform rotate-2 mt-8 md:mt-16">
+          <div class="tape" style="top: -12px; left: 50%; transform: rotate(-2deg);"></div>
+          <div class="w-14 h-14 border-2 border-ink rounded-full flex items-center justify-center mb-4 bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-ballpoint"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          </div>
+          <h3 class="text-3xl font-bold mb-3">Feels organic</h3>
+          <p class="text-xl text-graphite">Our proprietary stroke rendering engine makes every line feel like real ink on matte paper. <span class="highlighter">Zero friction.</span></p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="sketch-card md:col-span-8 md:col-start-3 transform rotate-1 mt-8">
+          <div class="tape" style="top: -12px; left: 10%; transform: rotate(-4deg);"></div>
+          <div class="w-14 h-14 border-2 border-ink rounded-full flex items-center justify-center mb-4 bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-ink"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h3 class="text-3xl font-bold mb-3">Multiplayer chaos</h3>
+          <p class="text-xl text-graphite">Invite your team to doodle together in real-time. It's like standing around a whiteboard, but nobody has to smell the dry-erase markers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="mb-32">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold inline-block relative">
+          Wall of Love
+          <div class="doodle-arrow hidden md:block" style="top: -20px; left: -60px; transform: rotate(-130deg) scale(0.6);"></div>
+        </h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Testimonial 1 -->
+        <div class="sketch-card transform -rotate-2">
+          <div class="tape" style="top: -12px; left: 50%;"></div>
+          <div class="flex gap-1 text-accent mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-xl text-graphite mb-6 flex-1">"I threw away all my rigid wireframing tools. Drawing wobbly boxes with my mouse is somehow exactly what our product team needed to foster actual creativity."</p>
+          <div class="flex items-center gap-3 border-t-2 border-ink border-dashed pt-4">
+            <div class="w-12 h-12 bg-white rounded-full border-2 border-ink overflow-hidden flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div>
+              <p class="font-bold text-lg leading-tight">Sarah J.</p>
+              <p class="text-sm font-mono text-graphite">Product Manager</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="sketch-card transform rotate-3 mt-6">
+          <div class="tape" style="top: -12px; left: 50%; transform: rotate(-5deg);"></div>
+          <div class="flex gap-1 text-accent mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-xl text-graphite mb-6 flex-1">"Finally, a tool that doesn't force me into a grid. The notebook background actually makes me feel less anxious about making mistakes."</p>
+          <div class="flex items-center gap-3 border-t-2 border-ink border-dashed pt-4">
+            <div class="w-12 h-12 bg-white rounded-full border-2 border-ink overflow-hidden flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div>
+              <p class="font-bold text-lg leading-tight">Mike R.</p>
+              <p class="text-sm font-mono text-graphite">Designer</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="sketch-card transform -rotate-1 md:mt-12">
+          <div class="tape" style="top: -12px; left: 50%; transform: rotate(3deg);"></div>
+          <div class="flex gap-1 text-accent mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-xl text-graphite mb-6 flex-1">"My favorite part is exporting a beautifully messy PDF for client presentations. It sets expectations perfectly: 'this is a draft, let's collaborate'."</p>
+          <div class="flex items-center gap-3 border-t-2 border-ink border-dashed pt-4">
+            <div class="w-12 h-12 bg-white rounded-full border-2 border-ink overflow-hidden flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div>
+              <p class="font-bold text-lg leading-tight">Dan K.</p>
+              <p class="text-sm font-mono text-graphite">Agency Founder</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="mb-32">
+      <div class="text-center mb-16 relative">
+        <h2 class="text-4xl md:text-5xl font-bold inline-block relative">
+          Fair Pricing
+          <svg class="absolute -bottom-4 left-0 w-full h-4" viewBox="0 0 100 10" preserveAspectRatio="none">
+            <path d="M0,5 Q50,10 100,5" fill="none" stroke="#D12828" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </h2>
+        <p class="text-2xl mt-6 text-graphite">No hidden fees, just pure creativity.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
+        <!-- Tier 1 -->
+        <div class="sketch-card transform rotate-1">
+          <h3 class="text-3xl font-bold mb-2">Doodler</h3>
+          <p class="font-mono text-graphite mb-4">Free forever</p>
+          <p class="text-5xl font-bold mb-6">$0<span class="text-xl font-normal">/mo</span></p>
+          
+          <ul class="space-y-3 mb-8 text-lg">
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 3 Canvases</li>
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic tools</li>
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Export to PNG</li>
+          </ul>
+          <button class="btn-primary w-full text-xl py-2 mt-auto">Start Free</button>
+        </div>
+
+        <!-- Tier 2 (Highlighted) -->
+        <div class="sketch-card bg-highlighter transform scale-105 -rotate-2 z-10 border-accent">
+          <div class="absolute -top-5 -right-5 bg-accent text-paper font-bold px-4 py-1 transform rotate-12 shadow-[2px_2px_0px_#0E2A5C] border-2 border-ink" style="border-radius: 4px 8px 3px 6px;">
+            Most Popular!
+          </div>
+          <h3 class="text-3xl font-bold mb-2">Sketch Artist</h3>
+          <p class="font-mono text-graphite mb-4">For professionals</p>
+          <p class="text-5xl font-bold mb-6">$12<span class="text-xl font-normal">/mo</span></p>
+          
+          <ul class="space-y-3 mb-8 text-lg font-medium">
+            <li class="flex items-center gap-2"><svg class="text-accent" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited Canvases</li>
+            <li class="flex items-center gap-2"><svg class="text-accent" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Multiplayer sync</li>
+            <li class="flex items-center gap-2"><svg class="text-accent" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> High-res PDF export</li>
+            <li class="flex items-center gap-2"><svg class="text-accent" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Version history</li>
+          </ul>
+          <button class="btn-accent w-full text-xl py-3 mt-auto">Get Started</button>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="sketch-card transform rotate-2">
+          <h3 class="text-3xl font-bold mb-2">Studio</h3>
+          <p class="font-mono text-graphite mb-4">For entire teams</p>
+          <p class="text-5xl font-bold mb-6">$49<span class="text-xl font-normal">/mo</span></p>
+          
+          <ul class="space-y-3 mb-8 text-lg">
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Artist</li>
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Team workspaces</li>
+            <li class="flex items-center gap-2"><svg class="text-ballpoint" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom branding</li>
+          </ul>
+          <button class="btn-primary w-full text-xl py-2 mt-auto">Contact Us</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="mb-32 relative">
+      <div class="sketch-card bg-paper text-center py-16 px-6 transform -rotate-1 max-w-4xl mx-auto border-4">
+        <div class="tape" style="top: -12px; left: 30%; transform: rotate(-2deg);"></div>
+        <div class="tape" style="top: -12px; left: 70%; transform: rotate(4deg);"></div>
+        
+        <h2 class="text-5xl font-bold mb-6">Ready to make a mess?</h2>
+        <p class="text-2xl text-graphite mb-10 max-w-2xl mx-auto">
+          Join 50,000+ thinkers who stopped polishing and started creating.
+        </p>
+        <button class="btn-accent text-3xl px-10 py-4 transform hover:scale-105">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Draw your first note
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t-4 border-ink bg-white relative z-50 pt-16 pb-8 px-6 lg:pl-24 mt-20">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 border-2 border-ink rounded bg-paper flex items-center justify-center transform -rotate-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
+          </div>
+          <span class="text-2xl font-bold tracking-tight text-ink">SketchNote</span>
+        </div>
+        <p class="text-xl text-graphite max-w-sm mb-6">The digital whiteboard for people who actually like whiteboards.</p>
+        
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 border-2 border-ink rounded-full flex items-center justify-center hover:bg-highlighter hover:text-accent transition-colors transform hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+          </a>
+          <a href="#" class="w-10 h-10 border-2 border-ink rounded-full flex items-center justify-center hover:bg-highlighter hover:text-accent transition-colors transform hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" class="w-10 h-10 border-2 border-ink rounded-full flex items-center justify-center hover:bg-highlighter hover:text-accent transition-colors transform hover:-translate-y-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="font-bold text-xl mb-4 underline decoration-2 underline-offset-4 decoration-accent">Product</h4>
+        <ul class="space-y-2 text-lg">
+          <li><a href="#" class="hover:text-accent transition-colors">Features</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">Templates</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">Integrations</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">Pricing</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h4 class="font-bold text-xl mb-4 underline decoration-2 underline-offset-4 decoration-accent">Legal</h4>
+        <ul class="space-y-2 text-lg">
+          <li><a href="#" class="hover:text-accent transition-colors">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">Terms of Use</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">Contact Us</a></li>
+          <li><a href="#" class="hover:text-accent transition-colors">SEO Links</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto pt-6 border-t-2 border-dashed border-ink/30 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="font-mono text-sm">© 2026 SketchNote Inc. All rights reserved.</p>
+      <div class="text-sm font-mono flex items-center gap-2">
+        Made with <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#D12828" stroke="#D12828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> and a lot of coffee.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Generate spiral binding holes
+    document.addEventListener("DOMContentLoaded", () => {
+      const spiral = document.getElementById('spiral');
+      if (spiral) {
+        // Create 20 spiral holes dynamically
+        for (let i = 0; i < 20; i++) {
+          const hole = document.createElement('div');
+          hole.className = 'spiral-hole';
+          
+          const ring = document.createElement('div');
+          ring.className = 'spiral-ring';
+          
+          hole.appendChild(ring);
+          spiral.appendChild(hole);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
