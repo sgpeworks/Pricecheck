@@ -241,19 +241,11 @@
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav class="fixed bottom-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-t-4 border-ink pb-safe">
   <div class="flex justify-around items-center h-16 max-w-5xl mx-auto">
-    <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full" href="#">
+    <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full text-accent" href="index.html">
       <span class="material-symbols-outlined">calculate</span>
       <span class="text-[12px] font-bold">Calculator</span>
     </a>
-    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="compare.html">
-      <span class="material-symbols-outlined">compare_arrows</span>
-      <span class="text-[12px] font-bold">Compare</span>
-    </a>
-    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="#">
-      <span class="material-symbols-outlined">barcode_scanner</span>
-      <span class="text-[12px] font-bold">Scanner</span>
-    </a>
-    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="#">
+    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="history.html">
       <span class="material-symbols-outlined">history</span>
       <span class="text-[12px] font-bold">History</span>
     </a>
@@ -616,7 +608,26 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-item-btn').addEventListener('click', addItem);
 
   document.getElementById('save-btn').addEventListener('click', function () {
+    const validItems = items.filter(it => parseFloat(it.price) > 0 && parseFloat(it.size) > 0);
+    if (validItems.length === 0) return; // Nothing to save
+    
     particleBurst(this);
+    
+    const history = JSON.parse(localStorage.getItem('pricecheck_history') || '[]');
+    const newEntry = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      globalUnitMultiplier,
+      items: validItems.map(it => ({ ...it }))
+    };
+    
+    history.unshift(newEntry);
+    if (history.length > 15) history.length = 15;
+    localStorage.setItem('pricecheck_history', JSON.stringify(history));
+    
+    const originalHtml = this.innerHTML;
+    this.innerHTML = `<span class="material-symbols-outlined">check</span> Saved!`;
+    setTimeout(() => { this.innerHTML = originalHtml; }, 2000);
   });
 
   document.getElementById('reset-btn').addEventListener('click', () => {

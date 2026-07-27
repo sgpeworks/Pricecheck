@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>PriceCheck – History</title>
+  <meta name="description" content="View your saved comparisons."/>
+  <link rel="manifest" href="./manifest.json">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#F4F1EA',
+            ink: '#0E2A5C',
+            accent: '#D12828',
+            graphite: '#333333',
+            highlighter: '#FFFFA5',
+            ballpoint: '#0000FF'
+          },
+          fontFamily: {
+            hand: ['"Patrick Hand"', 'cursive'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+      body { overscroll-behavior: none; font-family: 'Patrick Hand', cursive; }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+    
+    body { 
+      min-height: max(884px, 100dvh); 
+      background-color: #F4F1EA;
+      color: #0E2A5C;
+      background-image: linear-gradient(#ccc 1px, transparent 1px);
+      background-size: 100% 1.6rem;
+      line-height: 1.6rem;
+      position: relative;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .history-card {
+      background-color: #F4F1EA;
+      border: 3px solid #0E2A5C;
+      border-radius: 4px 12px 6px 14px;
+      box-shadow: 5px 5px 0px rgba(14,42,92,0.15);
+      transition: all 0.2s ease-out;
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+    }
+    
+    .winner-highlight {
+      background-color: #FFFFA5;
+      border: 2px dashed #D12828;
+      border-radius: 4px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .delete-btn {
+      color: #D12828;
+      transition: transform 0.1s;
+    }
+    .delete-btn:hover { transform: scale(1.2) rotate(10deg); }
+    .delete-btn:active { transform: scale(0.9); }
+
+    nav a[aria-current="page"] { color: #D12828; font-weight: 700; }
+    nav a:not([aria-current="page"]) { color: #333333; }
+    
+    .scribble-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .scribble-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q10,0 20,5 T40,5 T60,5 T80,5 T100,5' fill='none' stroke='%23D12828' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<!-- HEADER -->
+<header class="fixed top-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-b-4 border-ink pt-safe">
+  <div class="h-16 px-4 flex items-center justify-between max-w-2xl mx-auto">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded border-2 border-ink bg-white flex items-center justify-center transform -rotate-3 shadow-[2px_2px_0px_#0E2A5C]">
+        <span class="material-symbols-outlined text-accent text-[18px]">history</span>
+      </div>
+      <span class="text-2xl font-bold text-ink tracking-tight">History</span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="flex-1 w-full pt-24 pb-28 px-4 relative z-10">
+  <div class="flex flex-col w-full gap-6 max-w-5xl mx-auto">
+    
+    <div class="relative overflow-hidden bg-white border-4 border-ink rounded-[4px_12px_6px_14px] p-6 shadow-[6px_6px_0px_rgba(14,42,92,0.15)] transform rotate-1 mb-4">
+      <div class="relative z-10 flex flex-col gap-2">
+        <span class="text-sm font-bold text-accent uppercase tracking-widest scribble-underline self-start mb-2">Past Comparisons</span>
+        <h1 class="text-2xl font-bold text-ink leading-tight">Your Saved Deals</h1>
+        <p class="text-lg text-graphite">Here are your last 15 saved shopping comparisons.</p>
+      </div>
+    </div>
+
+    <div id="history-container" class="flex flex-col gap-2">
+      <!-- Cards rendered by JS -->
+    </div>
+
+    <div id="empty-state" class="hidden flex flex-col items-center justify-center py-10 opacity-70">
+      <span class="material-symbols-outlined text-6xl text-graphite mb-2">inbox</span>
+      <p class="text-xl font-bold text-graphite">No history yet.</p>
+      <p class="text-md text-graphite">Save a comparison to see it here.</p>
+    </div>
+    
+  </div>
+</main>
+
+<!-- NAV -->
+<nav class="fixed bottom-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-t-4 border-ink pb-safe">
+  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto">
+    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="index.html">
+      <span class="material-symbols-outlined">calculate</span>
+      <span class="text-[12px] font-bold">Calculator</span>
+    </a>
+    <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full text-accent" href="history.html">
+      <span class="material-symbols-outlined">history</span>
+      <span class="text-[12px] font-bold">History</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+  const UNIT_MULT = { 
+    g: 1, kg: 1000, 
+    ml: 1, L: 1000, 
+    pcs: 1, pack: 1, 
+    cm: 1, m: 100,
+    day: 1, month: 30, year: 365 
+  };
+
+  const formatINR = num => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(num);
+
+  function getBasePrice(item) {
+    const p = parseFloat(item.price) || 0;
+    const s = parseFloat(item.size)  || 0;
+    if (p > 0 && s > 0) return p / (s * (UNIT_MULT[item.unit] || 1));
+    return 0;
+  }
+
+  function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('pricecheck_history') || '[]');
+    const container = document.getElementById('history-container');
+    const emptyState = document.getElementById('empty-state');
+    
+    container.innerHTML = '';
+    
+    if (history.length === 0) {
+      emptyState.classList.remove('hidden');
+      return;
+    }
+    emptyState.classList.add('hidden');
+
+    history.forEach((session, index) => {
+      const date = new Date(session.date).toLocaleString(undefined, { 
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+      });
+
+      // Calculate the winner
+      const values = session.items.map(it => ({ id: it.id, label: it.label, baseVal: getBasePrice(it) }));
+      const minVal = Math.min(...values.map(v => v.baseVal));
+
+      const card = document.createElement('div');
+      card.className = 'history-card transform ' + (index % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]');
+      
+      let itemsHtml = session.items.map(it => {
+        const base = getBasePrice(it);
+        const isWinner = base === minVal;
+        const displayPrice = base * (session.globalUnitMultiplier || 1000);
+        
+        return `
+          <div class="flex justify-between items-center py-2 border-b-2 border-dashed border-ink/20 last:border-0 ${isWinner ? 'winner-highlight' : ''}">
+            <div class="flex flex-col">
+              <span class="font-bold text-lg">Item ${it.label} ${isWinner ? '🌟' : ''}</span>
+              <span class="text-sm text-graphite">${it.price ? '₹'+it.price : '₹0'} for ${it.size || 0} ${it.unit}</span>
+            </div>
+            <div class="text-right flex flex-col">
+              <span class="font-mono font-bold text-lg">${formatINR(displayPrice)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="flex justify-between items-start border-b-2 border-ink pb-2 mb-2">
+          <span class="text-sm font-bold text-graphite">${date}</span>
+          <button class="delete-btn flex items-center" data-id="${session.id}">
+            <span class="material-symbols-outlined text-lg">delete</span>
+          </button>
+        </div>
+        <div class="flex flex-col">
+          ${itemsHtml}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const id = parseInt(e.currentTarget.dataset.id);
+        deleteHistory(id);
+      });
+    });
+  }
+
+  function deleteHistory(id) {
+    let history = JSON.parse(localStorage.getItem('pricecheck_history') || '[]');
+    history = history.filter(h => h.id !== id);
+    localStorage.setItem('pricecheck_history', JSON.stringify(history));
+    renderHistory();
+  }
+
+  document.addEventListener('DOMContentLoaded', renderHistory);
+</script>
+</body>
+</html>
