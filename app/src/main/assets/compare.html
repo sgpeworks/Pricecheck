@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>PriceCheck — Compare</title><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-surface": "#2e3132", "error": "#ba1a1a", "error-container": "#ffdad6", "surface": "#f8f9fa", "on-surface-variant": "#3d4947", "outline-variant": "#bcc9c6", "on-primary-fixed-variant": "#005049", "primary-fixed-dim": "#6bd8cb", "secondary": "#006b5f", "on-error": "#ffffff", "surface-bright": "#f8f9fa", "secondary-container": "#62fae3", "surface-container-lowest": "#ffffff", "on-primary": "#ffffff", "tertiary-container": "#00873b", "tertiary-fixed-dim": "#4ae176", "surface-tint": "#006a61", "outline": "#6d7a77", "surface-container-highest": "#e1e3e4", "surface-variant": "#e1e3e4", "inverse-primary": "#6bd8cb", "on-background": "#191c1d", "on-tertiary-fixed": "#002109", "surface-container-high": "#e7e8e9", "tertiary-fixed": "#6bff8f", "on-tertiary": "#ffffff", "surface-container-low": "#f3f4f5", "on-tertiary-container": "#f7fff3", "on-secondary-fixed": "#00201c", "primary-fixed": "#89f5e7", "primary": "#00685f", "surface-container": "#edeeef", "tertiary": "#006b2d", "on-primary-fixed": "#00201d", "inverse-on-surface": "#f0f1f2", "on-secondary": "#ffffff", "on-tertiary-fixed-variant": "#005321", "surface-dim": "#d9dadb", "secondary-fixed": "#62fae3", "on-error-container": "#93000a", "background": "#f8f9fa", "secondary-fixed-dim": "#3cddc7", "on-surface": "#191c1d", "primary-container": "#008378", "on-primary-container": "#f4fffc", "on-secondary-container": "#007165", "on-secondary-fixed-variant": "#005047" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "xs": "4px", "margin-mobile": "16px", "base": "4px", "xl": "32px", "gutter": "12px", "md": "16px", "sm": "8px", "lg": "24px" }, "fontFamily": { "label-numeric": ["JetBrains Mono"], "price-display": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Inter"] }, "fontSize": { "label-numeric": ["16px", { "lineHeight": "20px", "fontWeight": "600" }], "price-display": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script><style>@layer base{body{overscroll-behavior:none;}.pt-safe{padding-top:env(safe-area-inset-top,0px);}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-sm"><img alt="PriceCheck Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeTbdUjosI8Wh2tqO7kUPWktRJ7lHJ2g6Z0Hgr2xQ2vFfCw23htmS3L_2NRh5x3G19J-8g8TXuXCC1hKtjLZU2vTerQ_PqYB5AtTrTLO7iw5RsXmp7NtwAYo1dXLXiGkU8E-X0NpTkjB-YyvUf5HOIOAOehrraMDE2CbQRZdm1nqDzzakW_WFUXdiwR0kfQtsnnccYCrHp3Hd6TMBuFMe39XLMPFD7dmshV7UEjZL1FFyE0zd-z3KizHjmy_EQyJtIrcahxTz-stt-"/><span class="font-headline-md text-headline-md text-primary tracking-tight">PriceCheck</span></div><div class="flex items-center gap-md"><span class="font-body-md text-body-md text-on-surface-variant">Compare</span><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 relative w-full pt-16 pb-24 bg-surface px-margin-mobile"><div class="flex flex-col w-full pb-24">
+<!-- Header & Sorting Section -->
+<div class="flex flex-col gap-md mb-lg">
+<div class="flex items-center justify-between">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Saved Comparisons</h1>
+<div class="flex gap-xs bg-surface-container-high p-xs rounded-full">
+<button class="px-md py-1.5 rounded-full bg-primary text-on-primary text-body-md font-medium transition-all shadow-sm" id="sort-recent" onclick="sortItems('recent')">Recent</button>
+<button class="px-md py-1.5 rounded-full text-on-surface-variant text-body-md font-medium hover:bg-surface-container-highest transition-all" id="sort-unit" onclick="sortItems('unit')">Best Unit</button>
+</div>
+</div>
+<!-- Quick Stats Sparkline -->
+<div class="bg-secondary-container text-on-secondary-container p-md rounded-xl shadow-sm flex items-center justify-between overflow-hidden relative">
+<div class="relative z-10">
+<p class="text-body-md opacity-90">Potential Savings</p>
+<p class="font-price-display text-price-display leading-tight">$12.45 <span class="text-body-md font-normal">this trip</span></p>
+</div>
+<div class="w-24 h-12 relative z-10">
+<svg class="w-full h-full stroke-on-secondary-container fill-none stroke-[3] overflow-visible" viewbox="0 0 100 40">
+<path d="M0 35 Q 20 35, 30 20 T 50 25 T 70 5 T 100 15" stroke-linecap="round"></path>
+</svg>
+</div>
+<!-- Decorative element -->
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-on-secondary-container/5 rounded-full"></div>
+</div>
+</div>
+<!-- Items List -->
+<div class="flex flex-col gap-md" id="comparison-list">
+<!-- Best Deal Card -->
+<div class="group relative bg-surface-container-lowest rounded-xl p-md shadow-md border-2 border-tertiary/20 transform transition-transform active:scale-[0.98]" data-timestamp="3" data-total-price="8.99" data-unit-price="0.05">
+<div class="absolute -top-3 left-4 bg-tertiary text-on-tertiary px-sm py-1 rounded-full flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-numeric text-[11px] uppercase tracking-wider">Absolute Best Deal</span>
+</div>
+<div class="flex justify-between items-start mt-2">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Organic Whole Milk</h3>
+<p class="text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">store</span> Whole Foods Market
+          </p>
+</div>
+<div class="text-right">
+<p class="font-price-display text-price-display text-primary">$8.99</p>
+<p class="font-label-numeric text-label-numeric text-tertiary">$0.05 / fl oz</p>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant/30 flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant italic">128 fl oz • Bulk Pack</span>
+<button class="text-primary flex items-center gap-xs font-medium">
+          Details <span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Regular Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-sm transform transition-transform active:scale-[0.98]" data-timestamp="2" data-total-price="4.50" data-unit-price="0.08">
+<div class="flex justify-between items-start">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Generic Greek Yogurt</h3>
+<p class="text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">store</span> Target
+          </p>
+</div>
+<div class="text-right">
+<p class="font-price-display text-price-display text-on-surface">$4.50</p>
+<p class="font-label-numeric text-label-numeric text-on-surface-variant">$0.08 / oz</p>
+</div>
+</div>
+<div class="mt-md flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">32 oz • Store Brand</span>
+<div class="flex gap-sm">
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Regular Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-sm transform transition-transform active:scale-[0.98]" data-timestamp="1" data-total-price="12.99" data-unit-price="0.12">
+<div class="flex justify-between items-start">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Premium Coffee Beans</h3>
+<p class="text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">store</span> Local Roastery
+          </p>
+</div>
+<div class="text-right">
+<p class="font-price-display text-price-display text-on-surface">$12.99</p>
+<p class="font-label-numeric text-label-numeric text-on-surface-variant">$0.12 / oz</p>
+</div>
+</div>
+<div class="mt-md flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">12 oz • Ethiopian Blend</span>
+<div class="flex gap-sm">
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden) -->
+<div class="hidden flex-col items-center justify-center py-xl text-center" id="empty-state">
+<div class="w-24 h-24 mb-md relative">
+<div class="absolute inset-0 bg-primary/10 rounded-full animate-pulse"></div>
+<span class="material-symbols-outlined text-[48px] text-primary absolute inset-0 flex items-center justify-center">shopping_basket</span>
+</div>
+<p class="font-headline-md text-on-surface">No items compared yet</p>
+<p class="text-body-md text-on-surface-variant px-xl mt-sm">Start scanning or adding items to find the best deals in your area.</p>
+</div>
+</div>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group" onclick="location.href='index.html'">
+<span class="material-symbols-outlined text-[28px] transition-transform group-hover:rotate-90">add</span>
+<!-- Tooltip style label -->
+<span class="absolute right-16 bg-inverse-surface text-inverse-on-surface px-md py-1 rounded-lg text-body-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Add New Item</span>
+</button>
+</div>
+<script>
+  function sortItems(criteria) {
+    const container = document.getElementById('comparison-list');
+    const items = Array.from(container.children).filter(el => el.hasAttribute('data-unit-price'));
+    const unitBtn = document.getElementById('sort-unit');
+    const recentBtn = document.getElementById('sort-recent');
+
+    // Update active UI states
+    if (criteria === 'unit') {
+      unitBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      unitBtn.classList.remove('text-on-surface-variant');
+      recentBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+      recentBtn.classList.add('text-on-surface-variant');
+    } else {
+      recentBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+      recentBtn.classList.remove('text-on-surface-variant');
+      unitBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+      unitBtn.classList.add('text-on-surface-variant');
+    }
+
+    items.sort((a, b) => {
+      if (criteria === 'unit') {
+        return parseFloat(a.dataset.unitPrice) - parseFloat(b.dataset.unitPrice);
+      } else {
+        return parseInt(b.dataset.timestamp) - parseInt(a.dataset.timestamp);
+      }
+    });
+
+    // Animate reorder
+    items.forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(10px)';
+    });
+
+    setTimeout(() => {
+      items.forEach(item => {
+        container.appendChild(item);
+        setTimeout(() => {
+          item.style.transition = 'all 0.3s ease';
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        }, 50);
+      });
+    }, 150);
+  }
+
+  // Visual feedback for interactions
+  document.querySelectorAll('[data-unit-price]').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.add('ring-2', 'ring-primary/20');
+      setTimeout(() => card.classList.remove('ring-2', 'ring-primary/20'), 500);
+    });
+  });
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="calculator" href="index.html"><span class="material-symbols-outlined">calculate</span><span class="font-body-md text-[10px]">Calculator</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-xs w-full h-full transition-colors text-primary" data-path="compare" href="compare.html"><span class="material-symbols-outlined">compare_arrows</span><span class="font-body-md text-[10px]">Compare</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="scanner" href="#"><span class="material-symbols-outlined">barcode_scanner</span><span class="font-body-md text-[10px]">Scanner</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="history" href="#"><span class="material-symbols-outlined">history</span><span class="font-body-md text-[10px]">History</span></a></div></nav></body></html>

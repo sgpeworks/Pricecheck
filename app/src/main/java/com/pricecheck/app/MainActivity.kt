@@ -25,6 +25,17 @@ class MainActivity : ComponentActivity() {
             loadUrl("file:///android_asset/index.html")
         }
         
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+        
         setContentView(webView)
     }
 }
