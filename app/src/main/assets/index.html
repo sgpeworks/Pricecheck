@@ -218,34 +218,46 @@
     <!-- Items Container -->
     <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 items-start"></div>
 
-    <!-- Add Item Button -->
-    <button id="add-item-btn" class="add-item-btn w-full h-10 flex items-center justify-center gap-2 font-bold text-sm mt-2">
-      <span class="material-symbols-outlined text-[18px]">add_circle</span>
-      Add Item
-    </button>
+    <!-- Add Item Button Removed from here -->
 
     <!-- Action Buttons -->
-    <div class="flex flex-col sm:flex-row gap-3 mt-3">
-      <button id="save-btn" class="btn-primary flex-1 h-10 flex items-center justify-center gap-2 font-bold text-sm">
-        <span class="material-symbols-outlined text-[18px]">save</span>
-        Save Comparison
-      </button>
+    <div class="flex flex-col sm:flex-row gap-3 mt-3 mb-10">
       <button id="reset-btn" class="btn-secondary flex-1 h-10 flex items-center justify-center gap-2 font-bold text-sm">
         <span class="material-symbols-outlined text-[18px]">restart_alt</span>
         Clear All
       </button>
     </div>
+    
+    <!-- Sticky Save Button (Floating) -->
+    <button id="save-btn" class="fixed bottom-20 right-4 z-[60] bg-white text-ink font-bold text-sm px-4 py-3 border-4 border-ink rounded-[4px_12px_6px_14px] shadow-[4px_4px_0px_#0E2A5C] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#0E2A5C] active:translate-y-0 active:shadow-[2px_2px_0px_#0E2A5C] transition-all flex items-center gap-2">
+      <span class="material-symbols-outlined text-accent">save</span> Save
+    </button>
 
   </div>
 </main>
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav class="fixed bottom-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-t-4 border-ink pb-safe">
-  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto">
+  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto relative px-6">
     <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full text-accent" href="index.html">
       <span class="material-symbols-outlined">calculate</span>
       <span class="text-[12px] font-bold">Calculator</span>
     </a>
+    
+    <!-- Center Plus Button -->
+    <div class="flex flex-col items-center justify-center w-full relative">
+      <button id="nav-add-btn" class="absolute -top-6 bg-accent text-white w-14 h-14 rounded-full border-4 border-ink shadow-[0px_4px_0px_#0E2A5C] flex items-center justify-center hover:scale-105 active:scale-95 active:translate-y-1 active:shadow-[0px_0px_0px_#0E2A5C] transition-all" style="animation: pulse 2s infinite;">
+        <span class="material-symbols-outlined text-3xl">add</span>
+      </button>
+      <style>
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(209, 40, 40, 0.4), 0px 4px 0px #0E2A5C; }
+          70% { box-shadow: 0 0 0 10px rgba(209, 40, 40, 0), 0px 4px 0px #0E2A5C; }
+          100% { box-shadow: 0 0 0 0 rgba(209, 40, 40, 0), 0px 4px 0px #0E2A5C; }
+        }
+      </style>
+    </div>
+
     <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="history.html">
       <span class="material-symbols-outlined">history</span>
       <span class="text-[12px] font-bold">History</span>
@@ -656,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateResults();
   });
 
-  document.getElementById('add-item-btn').addEventListener('click', addItem);
+  document.getElementById('nav-add-btn').addEventListener('click', addItem);
 
   document.getElementById('save-btn').addEventListener('click', function () {
     syncState();
@@ -688,7 +700,6 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: nextId++, label: 'B', price: '', size: '', unit: 'ml' },
     ];
     render();
-    document.getElementById('add-item-btn').style.display = '';
   });
 });
 </script>

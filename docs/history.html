@@ -145,13 +145,27 @@
   </div>
 </main>
 
-<!-- NAV -->
 <nav class="fixed bottom-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-t-4 border-ink pb-safe">
-  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto">
+  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto relative px-6">
     <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="index.html">
       <span class="material-symbols-outlined">calculate</span>
       <span class="text-[12px] font-bold">Calculator</span>
     </a>
+    
+    <!-- Center Plus Button (goes back to calc on this page) -->
+    <div class="flex flex-col items-center justify-center w-full relative">
+      <a href="index.html" class="absolute -top-6 bg-accent text-white w-14 h-14 rounded-full border-4 border-ink shadow-[0px_4px_0px_#0E2A5C] flex items-center justify-center hover:scale-105 active:scale-95 active:translate-y-1 active:shadow-[0px_0px_0px_#0E2A5C] transition-all" style="animation: pulse 2s infinite;">
+        <span class="material-symbols-outlined text-3xl">add</span>
+      </a>
+      <style>
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(209, 40, 40, 0.4), 0px 4px 0px #0E2A5C; }
+          70% { box-shadow: 0 0 0 10px rgba(209, 40, 40, 0), 0px 4px 0px #0E2A5C; }
+          100% { box-shadow: 0 0 0 0 rgba(209, 40, 40, 0), 0px 4px 0px #0E2A5C; }
+        }
+      </style>
+    </div>
+
     <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full text-accent" href="history.html">
       <span class="material-symbols-outlined">history</span>
       <span class="text-[12px] font-bold">History</span>
