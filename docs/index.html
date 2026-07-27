@@ -1,202 +1,537 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><title>PriceCheck — Calculator</title><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-surface": "#2e3132", "error": "#ba1a1a", "error-container": "#ffdad6", "surface": "#f8f9fa", "on-surface-variant": "#3d4947", "outline-variant": "#bcc9c6", "on-primary-fixed-variant": "#005049", "primary-fixed-dim": "#6bd8cb", "secondary": "#006b5f", "on-error": "#ffffff", "surface-bright": "#f8f9fa", "secondary-container": "#62fae3", "surface-container-lowest": "#ffffff", "on-primary": "#ffffff", "tertiary-container": "#00873b", "tertiary-fixed-dim": "#4ae176", "surface-tint": "#006a61", "outline": "#6d7a77", "surface-container-highest": "#e1e3e4", "surface-variant": "#e1e3e4", "inverse-primary": "#6bd8cb", "on-background": "#191c1d", "on-tertiary-fixed": "#002109", "surface-container-high": "#e7e8e9", "tertiary-fixed": "#6bff8f", "on-tertiary": "#ffffff", "surface-container-low": "#f3f4f5", "on-tertiary-container": "#f7fff3", "on-secondary-fixed": "#00201c", "primary-fixed": "#89f5e7", "primary": "#00685f", "surface-container": "#edeeef", "tertiary": "#006b2d", "on-primary-fixed": "#00201d", "inverse-on-surface": "#f0f1f2", "on-secondary": "#ffffff", "on-tertiary-fixed-variant": "#005321", "surface-dim": "#d9dadb", "secondary-fixed": "#62fae3", "on-error-container": "#93000a", "background": "#f8f9fa", "secondary-fixed-dim": "#3cddc7", "on-surface": "#191c1d", "primary-container": "#008378", "on-primary-container": "#f4fffc", "on-secondary-container": "#007165", "on-secondary-fixed-variant": "#005047" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "xs": "4px", "margin-mobile": "16px", "base": "4px", "xl": "32px", "gutter": "12px", "md": "16px", "sm": "8px", "lg": "24px" }, "fontFamily": { "label-numeric": ["JetBrains Mono"], "price-display": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "headline-lg": ["Inter"], "body-md": ["Inter"], "headline-lg-mobile": ["Inter"] }, "fontSize": { "label-numeric": ["16px", { "lineHeight": "20px", "fontWeight": "600" }], "price-display": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script><style>@layer base{body{overscroll-behavior:none;}.pt-safe{padding-top:env(safe-area-inset-top,0px);}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}}::-webkit-scrollbar{display:none;}</style><style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-sm"><img alt="PriceCheck Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeTbdUjosI8Wh2tqO7kUPWktRJ7lHJ2g6Z0Hgr2xQ2vFfCw23htmS3L_2NRh5x3G19J-8g8TXuXCC1hKtjLZU2vTerQ_PqYB5AtTrTLO7iw5RsXmp7NtwAYo1dXLXiGkU8E-X0NpTkjB-YyvUf5HOIOAOehrraMDE2CbQRZdm1nqDzzakW_WFUXdiwR0kfQtsnnccYCrHp3Hd6TMBuFMe39XLMPFD7dmshV7UEjZL1FFyE0zd-z3KizHjmy_EQyJtIrcahxTz-stt-"/><span class="font-headline-md text-headline-md text-primary tracking-tight">PriceCheck</span></div><div class="flex items-center gap-md"><span class="font-body-md text-body-md text-on-surface-variant">Calculator</span><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 relative w-full pt-16 pb-24 bg-surface px-margin-mobile"><div class="flex flex-col w-full gap-lg">
-<!-- Interactive Unit Calculator Header -->
-<div class="relative overflow-hidden bg-primary rounded-xl p-lg shadow-xl">
-<div class="relative z-10 flex flex-col gap-xs">
-<span class="font-body-md text-on-primary/80 uppercase tracking-wider">Smart Comparison</span>
-<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary">Unit Price Master</h2>
-<p class="font-body-md text-on-primary/70">Enter details to reveal the hidden value.</p>
-</div>
-<!-- Decorative Abstract Shape -->
-<svg class="absolute right-[-20px] top-[-20px] opacity-20 text-on-primary" height="160" viewbox="0 0 100 100" width="160">
-<circle cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="20 10" stroke-width="8"></circle>
-</svg>
-</div>
-<!-- Comparison Container -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
-<!-- Item A Card -->
-<div class="flex flex-col bg-surface-container-low rounded-xl p-md shadow-sm transition-all duration-300 ring-2 ring-transparent" id="card-a">
-<div class="flex items-center justify-between mb-md">
-<div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">A</div>
-<span class="font-headline-md text-headline-md text-on-surface">Item A</span>
-</div>
-<span class="hidden font-label-numeric text-label-numeric bg-tertiary text-on-tertiary px-sm py-xs rounded-full" id="badge-a">BEST DEAL</span>
-</div>
-<div class="space-y-md">
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Total Price ($)</label>
-<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="decimal" placeholder="0.00" step="0.01" type="number"/>
-</div>
-<div class="grid grid-cols-2 gap-sm">
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Size (g/ml)</label>
-<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" placeholder="500" type="number"/>
-</div>
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Qty</label>
-<input class="input-calc-a w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" type="number" value="1"/>
-</div>
-</div>
-</div>
-<div class="mt-lg pt-md border-t border-outline-variant/30">
-<div class="flex flex-col items-center py-sm">
-<span class="font-body-md text-on-surface-variant">Price per 100 units</span>
-<div class="font-price-display text-price-display text-on-surface" id="result-a">$0.00</div>
-</div>
-</div>
-</div>
-<!-- Item B Card -->
-<div class="flex flex-col bg-surface-container-low rounded-xl p-md shadow-sm transition-all duration-300 ring-2 ring-transparent" id="card-b">
-<div class="flex items-center justify-between mb-md">
-<div class="flex items-center gap-sm">
-<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant font-bold">B</div>
-<span class="font-headline-md text-headline-md text-on-surface">Item B</span>
-</div>
-<span class="hidden font-label-numeric text-label-numeric bg-tertiary text-on-tertiary px-sm py-xs rounded-full" id="badge-b">BEST DEAL</span>
-</div>
-<div class="space-y-md">
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Total Price ($)</label>
-<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="decimal" placeholder="0.00" step="0.01" type="number"/>
-</div>
-<div class="grid grid-cols-2 gap-sm">
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Size (g/ml)</label>
-<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" placeholder="500" type="number"/>
-</div>
-<div class="flex flex-col gap-xs">
-<label class="font-body-md text-on-surface-variant">Qty</label>
-<input class="input-calc-b w-full bg-surface-container-lowest h-12 px-md rounded-lg font-label-numeric text-label-numeric outline-none focus:ring-2 focus:ring-primary transition-all" inputmode="numeric" type="number" value="1"/>
-</div>
-</div>
-</div>
-<div class="mt-lg pt-md border-t border-outline-variant/30">
-<div class="flex flex-col items-center py-sm">
-<span class="font-body-md text-on-surface-variant">Price per 100 units</span>
-<div class="font-price-display text-price-display text-on-surface" id="result-b">$0.00</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Action Buttons -->
-<div class="flex flex-col gap-sm mt-sm">
-<button class="flex items-center justify-center gap-sm bg-primary text-on-primary h-14 rounded-xl font-headline-md text-headline-md active:scale-95 transition-transform shadow-md" id="add-to-history">
-<span class="material-symbols-outlined">save</span>
-      Save Comparison
-    </button>
-<button class="flex items-center justify-center gap-sm bg-surface-container-highest text-on-surface-variant h-14 rounded-xl font-body-lg text-body-lg active:scale-95 transition-transform" id="reset-btn">
-<span class="material-symbols-outlined">restart_alt</span>
-      Clear All
-    </button>
-</div>
-<!-- Educational Insight Section -->
-<div class="bg-secondary-container/30 rounded-xl p-md flex gap-md items-start">
-<div class="bg-secondary p-xs rounded-lg">
-<span class="material-symbols-outlined text-on-secondary text-[20px]">lightbulb</span>
-</div>
-<div class="flex flex-col gap-xs">
-<span class="font-headline-md text-[14px] text-on-secondary-container">Pro Tip</span>
-<p class="font-body-md text-[13px] text-on-secondary-container/80 leading-relaxed">The largest size isn't always the cheapest. Check the unit price to see the true cost of convenience.</p>
-</div>
-</div>
-<script>
-    const inputsA = document.querySelectorAll('.input-calc-a');
-    const inputsB = document.querySelectorAll('.input-calc-b');
-    const resultA = document.getElementById('result-a');
-    const resultB = document.getElementById('result-b');
-    const cardA = document.getElementById('card-a');
-    const cardB = document.getElementById('card-b');
-    const badgeA = document.getElementById('badge-a');
-    const badgeB = document.getElementById('badge-b');
-    const resetBtn = document.getElementById('reset-btn');
-
-    function calculateUnit(inputs) {
-      const price = parseFloat(inputs[0].value) || 0;
-      const size = parseFloat(inputs[1].value) || 0;
-      const qty = parseFloat(inputs[2].value) || 1;
-
-      if (price > 0 && size > 0 && qty > 0) {
-        return (price / (size * qty)) * 100;
-      }
-      return 0;
-    }
-
-    function updateDisplay() {
-      const valA = calculateUnit(inputsA);
-      const valB = calculateUnit(inputsB);
-
-      resultA.textContent = valA > 0 ? '$' + valA.toFixed(3) : '$0.00';
-      resultB.textContent = valB > 0 ? '$' + valB.toFixed(3) : '$0.00';
-
-      // Reset states
-      [cardA, cardB].forEach(c => c.classList.remove('ring-tertiary', 'bg-tertiary-container/10'));
-      [badgeA, badgeB].forEach(b => b.classList.add('hidden'));
-      [resultA, resultB].forEach(r => r.classList.replace('text-tertiary', 'text-on-surface'));
-
-      if (valA > 0 && valB > 0) {
-        if (valA < valB) {
-          cardA.classList.add('ring-tertiary', 'bg-tertiary-container/10');
-          badgeA.classList.remove('hidden');
-          resultA.classList.replace('text-on-surface', 'text-tertiary');
-        } else if (valB < valA) {
-          cardB.classList.add('ring-tertiary', 'bg-tertiary-container/10');
-          badgeB.classList.remove('hidden');
-          resultB.classList.replace('text-on-surface', 'text-tertiary');
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>PriceCheck – Smart Unit Price Comparison</title>
+  <meta name="description" content="Compare unit prices of any products instantly. Find the best deal using INR unit price calculator."/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#00685f",
+            "on-primary": "#ffffff",
+            "primary-container": "#008378",
+            "on-primary-container": "#f4fffc",
+            "primary-fixed": "#89f5e7",
+            "primary-fixed-dim": "#6bd8cb",
+            "on-primary-fixed": "#00201d",
+            "on-primary-fixed-variant": "#005049",
+            "secondary": "#006b5f",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#62fae3",
+            "on-secondary-container": "#007165",
+            "tertiary": "#006b2d",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#00873b",
+            "on-tertiary-container": "#f7fff3",
+            "error": "#ba1a1a",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a",
+            "surface": "#f8f9fa",
+            "on-surface": "#191c1d",
+            "surface-variant": "#e1e3e4",
+            "on-surface-variant": "#3d4947",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f4f5",
+            "surface-container": "#edeeef",
+            "surface-container-high": "#e7e8e9",
+            "surface-container-highest": "#e1e3e4",
+            "outline": "#6d7a77",
+            "outline-variant": "#bcc9c6",
+            "inverse-surface": "#2e3132",
+            "inverse-on-surface": "#f0f1f2",
+            "inverse-primary": "#6bd8cb",
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"],
+          }
         }
       }
     }
-
-    [...inputsA, ...inputsB].forEach(input => {
-      input.addEventListener('input', updateDisplay);
-    });
-
-    resetBtn.addEventListener('click', () => {
-      [...inputsA, ...inputsB].forEach(i => {
-        if (i.type === 'number' && i.value === '1' && i.classList.contains('w-full')) {
-           // Skip resetting qty to 1 if it's already there but just for safety
-        } else {
-           i.value = '';
-        }
-      });
-      // Set qty defaults back
-      inputsA[2].value = 1;
-      inputsB[2].value = 1;
-      updateDisplay();
-    });
-
-    // Moment of delight: particle burst on "Save"
-    document.getElementById('add-to-history').addEventListener('click', function(e) {
-      const rect = this.getBoundingClientRect();
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div');
-        p.className = 'fixed pointer-events-none w-2 h-2 rounded-full bg-primary z-[60]';
-        p.style.left = (rect.left + rect.width / 2) + 'px';
-        p.style.top = (rect.top + rect.height / 2) + 'px';
-        document.body.appendChild(p);
-
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = 2 + Math.random() * 4;
-        const vx = Math.cos(angle) * velocity;
-        const vy = Math.sin(angle) * velocity;
-        let opacity = 1;
-
-        const anim = () => {
-          p.style.left = (parseFloat(p.style.left) + vx) + 'px';
-          p.style.top = (parseFloat(p.style.top) + vy) + 'px';
-          opacity -= 0.02;
-          p.style.opacity = opacity;
-          if (opacity > 0) requestAnimationFrame(anim);
-          else p.remove();
-        };
-        requestAnimationFrame(anim);
-      }
-    });
   </script>
-</div></main><nav class="fixed bottom-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary"><div class="flex justify-around items-center h-16"><a aria-current="page" class="flex flex-col items-center justify-center gap-xs w-full h-full transition-colors text-primary" data-path="calculator" href="index.html"><span class="material-symbols-outlined">calculate</span><span class="font-body-md text-[10px]">Calculator</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="compare" href="compare.html"><span class="material-symbols-outlined">compare_arrows</span><span class="font-body-md text-[10px]">Compare</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="scanner" href="#"><span class="material-symbols-outlined">barcode_scanner</span><span class="font-body-md text-[10px]">Scanner</span></a><a class="flex flex-col items-center justify-center gap-xs w-full h-full text-on-surface-variant transition-colors" data-path="history" href="#"><span class="material-symbols-outlined">history</span><span class="font-body-md text-[10px]">History</span></a></div></nav></body></html>
+  <style>
+    @layer base {
+      body { overscroll-behavior: none; font-family: 'Inter', sans-serif; }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+    body { min-height: max(884px, 100dvh); }
+
+    .item-card {
+      transition: box-shadow 0.3s ease, ring 0.3s ease, background 0.3s ease;
+    }
+    .item-card.best {
+      box-shadow: 0 0 0 2.5px #006b2d, 0 4px 24px rgba(0,107,45,0.10);
+      background: rgba(107, 255, 143, 0.06);
+    }
+    .item-card .best-badge { display: none; }
+    .item-card.best .best-badge { display: flex; }
+
+    .result-val { transition: color 0.3s ease; }
+    .item-card.best .result-val { color: #006b2d; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .card-appear { animation: fadeSlideIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    @keyframes popIn {
+      0%   { transform: scale(0.8); opacity: 0; }
+      60%  { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .badge-pop { animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    .btn-primary {
+      background: #00685f;
+      color: #fff;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-primary:active { transform: scale(0.96); }
+    .btn-secondary {
+      background: #e1e3e4;
+      color: #3d4947;
+      transition: transform 0.1s;
+    }
+    .btn-secondary:active { transform: scale(0.96); }
+
+    .add-item-btn {
+      border: 2px dashed #bcc9c6;
+      background: transparent;
+      color: #3d4947;
+      transition: border-color 0.2s, background 0.2s, transform 0.1s;
+    }
+    .add-item-btn:hover { border-color: #00685f; background: rgba(0,104,95,0.05); color: #00685f; }
+    .add-item-btn:active { transform: scale(0.97); }
+
+    .remove-btn {
+      color: #ba1a1a;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .remove-btn:hover { background: rgba(186,26,26,0.08); }
+    .remove-btn:active { transform: scale(0.9); }
+
+    /* Nav active */
+    nav a[aria-current="page"] { color: #00685f; }
+    nav a:not([aria-current="page"]) { color: #3d4947; }
+  </style>
+</head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen">
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe">
+  <div class="h-16 px-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary text-[18px]">shopping_cart</span>
+      </div>
+      <span class="text-xl font-bold text-primary tracking-tight">PriceCheck</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-on-surface-variant hidden sm:block">Calculator</span>
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main class="flex-1 w-full pt-20 pb-28 px-4">
+  <div class="flex flex-col w-full gap-5 max-w-2xl mx-auto">
+
+    <!-- Hero Banner -->
+    <div class="relative overflow-hidden bg-primary rounded-2xl p-6 shadow-xl">
+      <div class="relative z-10 flex flex-col gap-1">
+        <span class="text-xs font-semibold text-on-primary/70 uppercase tracking-widest">Smart Comparison</span>
+        <h1 class="text-2xl font-bold text-on-primary leading-tight">Unit Price Master</h1>
+        <p class="text-sm text-on-primary/70">Add items, enter details, find the best deal instantly.</p>
+      </div>
+      <div class="absolute right-0 top-0 w-36 h-36 opacity-10">
+        <svg viewBox="0 0 100 100" width="144" height="144">
+          <circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="8" stroke-dasharray="20 10"/>
+          <circle cx="50" cy="50" r="22" fill="none" stroke="white" stroke-width="5" stroke-dasharray="10 6"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Summary Bar (shows when ≥2 items have values) -->
+    <div id="summary-bar" class="hidden bg-tertiary/10 border border-tertiary/30 rounded-2xl p-4 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-tertiary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-on-tertiary text-[18px]">emoji_events</span>
+      </div>
+      <div>
+        <p class="text-xs text-tertiary font-semibold uppercase tracking-wider">Best Deal</p>
+        <p id="summary-text" class="text-sm font-bold text-on-surface"></p>
+      </div>
+    </div>
+
+    <!-- Items Container -->
+    <div id="items-container" class="flex flex-col gap-4"></div>
+
+    <!-- Add Item Button -->
+    <button id="add-item-btn" class="add-item-btn w-full h-14 rounded-2xl flex items-center justify-center gap-2 font-semibold text-base">
+      <span class="material-symbols-outlined text-[22px]">add_circle</span>
+      Add Item
+    </button>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col gap-3 mt-1">
+      <button id="save-btn" class="btn-primary w-full h-14 rounded-2xl flex items-center justify-center gap-2 font-semibold text-base shadow-md">
+        <span class="material-symbols-outlined">save</span>
+        Save Comparison
+      </button>
+      <button id="reset-btn" class="btn-secondary w-full h-14 rounded-2xl flex items-center justify-center gap-2 font-semibold text-base">
+        <span class="material-symbols-outlined">restart_alt</span>
+        Clear All
+      </button>
+    </div>
+
+    <!-- Pro Tip -->
+    <div class="bg-secondary-container/30 rounded-2xl p-4 flex gap-3 items-start">
+      <div class="bg-secondary p-1.5 rounded-xl flex-shrink-0">
+        <span class="material-symbols-outlined text-on-secondary text-[20px]">lightbulb</span>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-on-secondary-container mb-1">Pro Tip</p>
+        <p class="text-xs text-on-secondary-container/80 leading-relaxed">The largest size isn't always the cheapest. The unit price reveals the true cost — always compare before buying!</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav class="fixed bottom-0 inset-x-0 z-50 bg-surface/90 backdrop-blur-xl pb-safe shadow-[0_-1px_8px_rgba(0,0,0,0.06)]">
+  <div class="flex justify-around items-center h-16">
+    <a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-full h-full" href="#">
+      <span class="material-symbols-outlined">calculate</span>
+      <span class="text-[10px] font-medium">Calculator</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 w-full h-full text-on-surface-variant" href="compare.html">
+      <span class="material-symbols-outlined">compare_arrows</span>
+      <span class="text-[10px] font-medium">Compare</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 w-full h-full text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined">barcode_scanner</span>
+      <span class="text-[10px] font-medium">Scanner</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-0.5 w-full h-full text-on-surface-variant" href="#">
+      <span class="material-symbols-outlined">history</span>
+      <span class="text-[10px] font-medium">History</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════
+//  State
+// ═══════════════════════════════════════════════
+const LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let items = [];   // { id, label, price, size, qty }
+let nextId = 0;
+
+// ═══════════════════════════════════════════════
+//  Helpers
+// ═══════════════════════════════════════════════
+function unitPrice(item) {
+  const p = parseFloat(item.price) || 0;
+  const s = parseFloat(item.size)  || 0;
+  const q = parseFloat(item.qty)   || 1;
+  if (p > 0 && s > 0 && q > 0) return (p / (s * q)) * 100;
+  return 0;
+}
+
+function formatINR(val) {
+  if (val <= 0) return '₹0.00';
+  return '₹' + val.toFixed(3);
+}
+
+function getLabelColor(idx) {
+  const palettes = [
+    { bg: 'bg-secondary-container', text: 'text-on-secondary-container' },
+    { bg: 'bg-primary-fixed', text: 'text-on-primary-fixed-variant' },
+    { bg: 'bg-[#ffdad6]', text: 'text-[#93000a]' },
+    { bg: 'bg-[#e8def8]', text: 'text-[#4a4458]' },
+    { bg: 'bg-[#fef7cd]', text: 'text-[#7a6500]' },
+  ];
+  return palettes[idx % palettes.length];
+}
+
+// ═══════════════════════════════════════════════
+//  Render a single item card
+// ═══════════════════════════════════════════════
+function createCard(item, idx) {
+  const pal = getLabelColor(idx);
+  const canRemove = items.length > 1;
+
+  const card = document.createElement('div');
+  card.className = 'item-card flex flex-col bg-surface-container-low rounded-2xl p-4 shadow-sm card-appear';
+  card.dataset.id = item.id;
+
+  card.innerHTML = `
+    <!-- Card Header -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-full ${pal.bg} flex items-center justify-center font-bold text-base ${pal.text}">
+          ${item.label}
+        </div>
+        <span class="font-semibold text-base text-on-surface">Item ${item.label}</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="best-badge items-center gap-1 font-semibold text-xs bg-tertiary text-on-tertiary px-3 py-1 rounded-full badge-pop">
+          <span class="material-symbols-outlined text-[13px]">stars</span>
+          BEST DEAL
+        </span>
+        ${canRemove ? `
+        <button class="remove-btn w-8 h-8 rounded-full flex items-center justify-center ml-1" data-remove="${item.id}" title="Remove item">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>` : ''}
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="space-y-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs text-on-surface-variant font-medium">Total Price (₹)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-mono font-semibold">₹</span>
+          <input
+            data-field="price" data-id="${item.id}"
+            class="calc-input w-full bg-surface-container-lowest h-12 pl-8 pr-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
+            type="number" inputmode="decimal" placeholder="0.00" step="0.01"
+            value="${item.price}"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-on-surface-variant font-medium">Size (g / ml)</label>
+          <input
+            data-field="size" data-id="${item.id}"
+            class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
+            type="number" inputmode="numeric" placeholder="500"
+            value="${item.size}"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-on-surface-variant font-medium">Qty</label>
+          <input
+            data-field="qty" data-id="${item.id}"
+            class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
+            type="number" inputmode="numeric" placeholder="1"
+            value="${item.qty}"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="mt-4 pt-3 border-t border-outline-variant/30">
+      <div class="flex flex-col items-center py-1">
+        <span class="text-xs text-on-surface-variant mb-1">Price per 100 units</span>
+        <div class="result-val font-mono font-extrabold text-3xl tracking-tight text-on-surface" data-result="${item.id}">
+          ₹0.00
+        </div>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// ═══════════════════════════════════════════════
+//  Full render
+// ═══════════════════════════════════════════════
+function render() {
+  const container = document.getElementById('items-container');
+  container.innerHTML = '';
+  items.forEach((item, idx) => {
+    const card = createCard(item, idx);
+    container.appendChild(card);
+  });
+  attachInputListeners();
+  updateResults();
+}
+
+// ═══════════════════════════════════════════════
+//  Attach listeners to current inputs
+// ═══════════════════════════════════════════════
+function attachInputListeners() {
+  document.querySelectorAll('.calc-input').forEach(input => {
+    input.addEventListener('input', e => {
+      const id = parseInt(e.target.dataset.id);
+      const field = e.target.dataset.field;
+      const item = items.find(it => it.id === id);
+      if (item) item[field] = e.target.value;
+      updateResults();
+    });
+  });
+
+  document.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const id = parseInt(btn.dataset.remove);
+      removeItem(id);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  Update result displays & best-deal highlight
+// ═══════════════════════════════════════════════
+function updateResults() {
+  const values = items.map(item => ({ id: item.id, label: item.label, val: unitPrice(item) }));
+
+  // Update result labels
+  values.forEach(({ id, val }) => {
+    const el = document.querySelector(`[data-result="${id}"]`);
+    if (el) el.textContent = formatINR(val);
+  });
+
+  // Find best deal (lowest non-zero unit price)
+  const active = values.filter(v => v.val > 0);
+  const allCards = document.querySelectorAll('.item-card');
+  allCards.forEach(c => c.classList.remove('best'));
+
+  const summaryBar = document.getElementById('summary-bar');
+  const summaryText = document.getElementById('summary-text');
+
+  if (active.length >= 2) {
+    const minVal = Math.min(...active.map(v => v.val));
+    const winners = active.filter(v => v.val === minVal);
+
+    winners.forEach(winner => {
+      const card = document.querySelector(`.item-card[data-id="${winner.id}"]`);
+      if (card) card.classList.add('best');
+    });
+
+    const saving = active.length >= 2
+      ? Math.max(...active.map(v => v.val)) - minVal
+      : 0;
+
+    summaryBar.classList.remove('hidden');
+    summaryBar.classList.add('flex');
+    const winnerLabels = winners.map(w => `Item ${w.label}`).join(' & ');
+    summaryText.textContent = `${winnerLabels} saves ₹${saving.toFixed(3)} per 100 units`;
+  } else {
+    summaryBar.classList.add('hidden');
+    summaryBar.classList.remove('flex');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  Add / Remove items
+// ═══════════════════════════════════════════════
+function addItem() {
+  const idx = items.length;
+  if (idx >= LABELS.length) return;
+  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', qty: '1' });
+
+  // Partial re-render: just append new card
+  const container = document.getElementById('items-container');
+  const card = createCard(items[items.length - 1], idx);
+  container.appendChild(card);
+  attachInputListeners();
+
+  // Update remove buttons on all cards (now all can remove since ≥2)
+  if (items.length === 2) render(); // re-render to show remove on first card too
+  updateResults();
+
+  // Hide add button when max
+  document.getElementById('add-item-btn').style.display = items.length >= 10 ? 'none' : '';
+}
+
+function removeItem(id) {
+  items = items.filter(it => it.id !== id);
+  // Re-label remaining items A, B, C…
+  items.forEach((item, idx) => { item.label = LABELS[idx]; });
+  render();
+  document.getElementById('add-item-btn').style.display = '';
+}
+
+// ═══════════════════════════════════════════════
+//  Save particle burst
+// ═══════════════════════════════════════════════
+function particleBurst(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const colors = ['#00685f','#006b2d','#62fae3','#00873b','#6bd8cb'];
+
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    const size = 6 + Math.random() * 6;
+    p.style.cssText = `
+      position:fixed; pointer-events:none;
+      width:${size}px; height:${size}px;
+      border-radius:50%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${cx}px; top:${cy}px;
+      z-index:9999; opacity:1;
+    `;
+    document.body.appendChild(p);
+
+    const angle = (Math.PI * 2 * i) / 16 + Math.random() * 0.4;
+    const speed = 60 + Math.random() * 80;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed - 40;
+    let t = 0;
+
+    const tick = () => {
+      t += 0.018;
+      const x = cx + vx * t;
+      const y = cy + vy * t + 0.5 * 300 * t * t;
+      p.style.left = x + 'px';
+      p.style.top  = y + 'px';
+      p.style.opacity = Math.max(0, 1 - t * 2);
+      if (t < 0.6) requestAnimationFrame(tick);
+      else p.remove();
+    };
+    requestAnimationFrame(tick);
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  Init
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Start with A and B
+  items = [
+    { id: nextId++, label: 'A', price: '', size: '', qty: '1' },
+    { id: nextId++, label: 'B', price: '', size: '', qty: '1' },
+  ];
+  render();
+
+  document.getElementById('add-item-btn').addEventListener('click', addItem);
+
+  document.getElementById('save-btn').addEventListener('click', function () {
+    particleBurst(this);
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    items = [
+      { id: nextId++, label: 'A', price: '', size: '', qty: '1' },
+      { id: nextId++, label: 'B', price: '', size: '', qty: '1' },
+    ];
+    render();
+    document.getElementById('add-item-btn').style.display = '';
+  });
+});
+</script>
+</body>
+</html>
