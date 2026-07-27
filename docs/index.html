@@ -170,6 +170,16 @@
       </div>
     </div>
 
+    <!-- Global Unit Selector -->
+    <div class="flex items-center justify-between px-2 mb-1">
+      <span class="text-sm font-semibold text-on-surface-variant">Compare all prices per:</span>
+      <select id="global-unit" class="bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-1.5 text-sm font-medium outline-none focus:ring-2 focus:ring-primary text-on-surface">
+        <option value="1">1 unit (g / ml)</option>
+        <option value="100">100 units (100g / 100ml)</option>
+        <option value="1000" selected>1000 units (1kg / 1L)</option>
+      </select>
+    </div>
+
     <!-- Summary Bar (shows when ≥2 items have values) -->
     <div id="summary-bar" class="hidden bg-tertiary/10 border border-tertiary/30 rounded-2xl p-4 flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-tertiary flex items-center justify-center flex-shrink-0">
@@ -243,8 +253,9 @@
 //  State
 // ═══════════════════════════════════════════════
 const LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-let items = [];   // { id, label, price, size, unit }
+let items = [];   // { id, label, price, size, unit, qty }
 let nextId = 0;
+let globalUnitMultiplier = 1000;
 
 // ═══════════════════════════════════════════════
 //  Helpers
@@ -254,17 +265,36 @@ const UNIT_MULT = { g: 1, kg: 1000, ml: 1, L: 1000, pcs: 1 };
 function getBasePrice(item) {
   const p = parseFloat(item.price) || 0;
   const s = parseFloat(item.size)  || 0;
-  if (p > 0 && s > 0) {
-    return p / (s * (UNIT_MULT[item.unit] || 1));
+  const q = parseFloat(item.qty)   || 1;
+  if (p > 0 && s > 0 && q > 0) {
+    return p / (s * q * (UNIT_MULT[item.unit] || 1));
   }
   return 0;
 }
 
-function getDisplayPrice(item) {
-  const p = parseFloat(item.price) || 0;
-  const s = parseFloat(item.size)  || 0;
-  if (p > 0 && s > 0) return p / s;
-  return 0;
+function getDisplayInfo(item) {
+  const basePrice = getBasePrice(item);
+  if (basePrice === 0) return { val: 0, label: `Price per 1 ${item.unit}` };
+  
+  const val = basePrice * globalUnitMultiplier;
+  const isWeight = ['g', 'kg'].includes(item.unit);
+  const isVol = ['ml', 'L'].includes(item.unit);
+  
+  let label = '';
+  if (globalUnitMultiplier === 1000) {
+    if (isWeight) label = 'Price per 1 kg';
+    else if (isVol) label = 'Price per 1 L';
+    else label = 'Price per 1000 pcs';
+  } else if (globalUnitMultiplier === 100) {
+    if (isWeight) label = 'Price per 100 g';
+    else if (isVol) label = 'Price per 100 ml';
+    else label = 'Price per 100 pcs';
+  } else {
+    if (isWeight) label = 'Price per 1 g';
+    else if (isVol) label = 'Price per 1 ml';
+    else label = 'Price per 1 pc';
+  }
+  return { val, label };
 }
 
 function formatINR(val) {
@@ -329,7 +359,7 @@ function createCard(item, idx) {
           />
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-3 gap-2">
         <div class="flex flex-col gap-1">
           <label class="text-xs text-on-surface-variant font-medium">Size</label>
           <input
@@ -343,14 +373,23 @@ function createCard(item, idx) {
           <label class="text-xs text-on-surface-variant font-medium">Unit</label>
           <select
             data-field="unit" data-id="${item.id}"
-            class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
+            class="calc-input w-full bg-surface-container-lowest h-12 px-2 rounded-xl font-mono font-semibold text-sm outline-none focus:ring-2 focus:ring-primary transition-all"
           >
-            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
+            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>g</option>
             <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
             <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
-            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
+            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>L</option>
             <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
           </select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-on-surface-variant font-medium">Qty</label>
+          <input
+            data-field="qty" data-id="${item.id}"
+            class="calc-input w-full bg-surface-container-lowest h-12 px-3 rounded-xl font-mono font-semibold text-base outline-none focus:ring-2 focus:ring-primary transition-all"
+            type="number" inputmode="numeric" placeholder="1"
+            value="${item.qty}"
+          />
         </div>
       </div>
     </div>
@@ -409,21 +448,24 @@ function attachInputListeners() {
 //  Update result displays & best-deal highlight
 // ═══════════════════════════════════════════════
 function updateResults() {
-  const values = items.map(item => ({ 
-    id: item.id, 
-    label: item.label, 
-    baseVal: getBasePrice(item),
-    displayVal: getDisplayPrice(item),
-    unit: item.unit
-  }));
+  const values = items.map(item => {
+    const info = getDisplayInfo(item);
+    return { 
+      id: item.id, 
+      label: item.label, 
+      baseVal: getBasePrice(item),
+      displayVal: info.val,
+      displayLabel: info.label
+    };
+  });
 
   // Update result labels
-  values.forEach(({ id, displayVal, unit }) => {
+  values.forEach(({ id, displayVal, displayLabel }) => {
     const el = document.querySelector(`[data-result="${id}"]`);
     if (el) el.textContent = formatINR(displayVal);
     
     const lbl = document.querySelector(`[data-unit-label="${id}"]`);
-    if (lbl) lbl.textContent = `Price per 1 ${unit}`;
+    if (lbl) lbl.textContent = displayLabel;
   });
 
   // Find best deal (lowest non-zero base price)
@@ -465,7 +507,7 @@ function updateResults() {
 function addItem() {
   const idx = items.length;
   if (idx >= LABELS.length) return;
-  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', unit: 'g' });
+  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', unit: 'g', qty: '1' });
 
   // Partial re-render: just append new card
   const container = document.getElementById('items-container');
@@ -537,10 +579,15 @@ function particleBurst(el) {
 document.addEventListener('DOMContentLoaded', () => {
   // Start with A and B
   items = [
-    { id: nextId++, label: 'A', price: '', size: '', unit: 'g' },
-    { id: nextId++, label: 'B', price: '', size: '', unit: 'g' },
+    { id: nextId++, label: 'A', price: '', size: '', unit: 'L', qty: '1' },
+    { id: nextId++, label: 'B', price: '', size: '', unit: 'ml', qty: '1' },
   ];
   render();
+
+  document.getElementById('global-unit').addEventListener('change', e => {
+    globalUnitMultiplier = parseInt(e.target.value);
+    updateResults();
+  });
 
   document.getElementById('add-item-btn').addEventListener('click', addItem);
 
@@ -550,8 +597,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('reset-btn').addEventListener('click', () => {
     items = [
-      { id: nextId++, label: 'A', price: '', size: '', unit: 'g' },
-      { id: nextId++, label: 'B', price: '', size: '', unit: 'g' },
+      { id: nextId++, label: 'A', price: '', size: '', unit: 'L', qty: '1' },
+      { id: nextId++, label: 'B', price: '', size: '', unit: 'ml', qty: '1' },
     ];
     render();
     document.getElementById('add-item-btn').style.display = '';
