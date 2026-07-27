@@ -531,26 +531,31 @@ function updateResults() {
 }
 
 // ═══════════════════════════════════════════════
-//  Add / Remove items
+//  Add / Remove / Duplicate items
 // ═══════════════════════════════════════════════
+function syncState() {
+  document.querySelectorAll('.item-card').forEach(card => {
+    const cardId = parseInt(card.dataset.id);
+    const it = items.find(i => i.id === cardId);
+    if (it) {
+      it.price = card.querySelector('[data-field="price"]').value;
+      it.size = card.querySelector('[data-field="size"]').value;
+      it.unit = card.querySelector('[data-field="unit"]').value;
+    }
+  });
+}
+
 function addItem() {
   const idx = items.length;
   if (idx >= LABELS.length) return;
+  syncState();
   items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', unit: 'g' });
-
-  // Partial re-render: just append new card
-  const container = document.getElementById('items-container');
-  const card = createCard(items[items.length - 1], idx);
-  container.appendChild(card);
-  attachInputListeners();
-
-  if (items.length === 2) render();
-  updateResults();
-
+  render();
   document.getElementById('add-item-btn').style.display = items.length >= 10 ? 'none' : '';
 }
 
 function removeItem(id) {
+  syncState();
   items = items.filter(it => it.id !== id);
   items.forEach((item, idx) => { item.label = LABELS[idx]; });
   render();
@@ -560,6 +565,8 @@ function removeItem(id) {
 function duplicateItem(id) {
   const idx = items.length;
   if (idx >= LABELS.length) return; // Reached max labels
+  
+  syncState();
   
   const original = items.find(it => it.id === id);
   if (!original) return;
@@ -572,7 +579,6 @@ function duplicateItem(id) {
     unit: original.unit 
   });
 
-  // Re-render all to ensure labels and colors stay consistent
   render();
   document.getElementById('add-item-btn').style.display = items.length >= 10 ? 'none' : '';
 }
@@ -638,6 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-item-btn').addEventListener('click', addItem);
 
   document.getElementById('save-btn').addEventListener('click', function () {
+    syncState();
     const validItems = items.filter(it => parseFloat(it.price) > 0 && parseFloat(it.size) > 0);
     if (validItems.length === 0) return; // Nothing to save
     
