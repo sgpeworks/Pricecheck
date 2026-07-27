@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             }
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
-            loadUrl("https://sgpeworks.github.io/Pricecheck/")
+            loadUrl("file:///android_asset/index.html")
         }
         
         setContentView(webView)

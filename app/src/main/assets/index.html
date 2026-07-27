@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>PriceCheck – Smart Unit Price Comparison</title>
+  <meta name="description" content="Compare unit prices of any products instantly."/>
+  <link rel="manifest" href="./manifest.json">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+  
+  <script src="tailwind.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#F4F1EA',
+            ink: '#0E2A5C',
+            accent: '#D12828',
+            graphite: '#333333',
+            highlighter: '#FFFFA5',
+            ballpoint: '#0000FF'
+          },
+          fontFamily: {
+            hand: ['"Patrick Hand"', 'cursive'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @layer base {
+      body { overscroll-behavior: none; font-family: 'Patrick Hand', cursive; }
+      .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    }
+    ::-webkit-scrollbar { display: none; }
+    
+    body { 
+      min-height: max(884px, 100dvh); 
+      background-color: #F4F1EA;
+      color: #0E2A5C;
+      background-image: linear-gradient(#ccc 1px, transparent 1px);
+      background-size: 100% 1.6rem;
+      line-height: 1.6rem;
+      position: relative;
+    }
+    
+    /* Matte paper grain effect */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .item-card {
+      background-color: #F4F1EA;
+      border: 3px solid #0E2A5C;
+      border-radius: 4px 12px 6px 14px;
+      box-shadow: 5px 5px 0px rgba(14,42,92,0.15);
+      transition: all 0.2s ease-out;
+      position: relative;
+    }
+    .item-card.best {
+      border-color: #D12828;
+      box-shadow: 6px 6px 0px rgba(209,40,40,0.2);
+      background-color: #FFFFA5;
+    }
+    .item-card .best-badge { display: none; }
+    .item-card.best .best-badge { display: flex; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .card-appear { animation: fadeSlideIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    @keyframes popIn {
+      0%   { transform: scale(0.8); opacity: 0; }
+      60%  { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .badge-pop { animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    .calc-input {
+      border: 2px solid #0E2A5C;
+      border-radius: 2px 8px 3px 6px;
+      background-color: #fff;
+    }
+
+    .btn-primary {
+      background-color: #D12828;
+      color: #F4F1EA;
+      border: 3px solid #0E2A5C;
+      border-radius: 8px 3px 10px 4px;
+      box-shadow: 4px 4px 0px #0E2A5C;
+      transition: all 0.2s ease-out;
+    }
+    .btn-primary:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #0E2A5C; }
+    
+    .btn-secondary {
+      background-color: #F4F1EA;
+      color: #0E2A5C;
+      border: 3px solid #0E2A5C;
+      border-radius: 2px 10px 3px 8px;
+      box-shadow: 4px 4px 0px #0E2A5C;
+      transition: all 0.2s ease-out;
+    }
+    .btn-secondary:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #0E2A5C; }
+
+    .add-item-btn {
+      border: 3px dashed #333333;
+      background: transparent;
+      color: #333333;
+      border-radius: 4px 12px 6px 14px;
+      transition: all 0.2s;
+    }
+    .add-item-btn:hover { border-color: #0E2A5C; background: rgba(14,42,92,0.05); color: #0E2A5C; }
+    .add-item-btn:active { transform: scale(0.97); }
+
+    .remove-btn {
+      color: #D12828;
+      transition: transform 0.1s;
+    }
+    .remove-btn:hover { transform: scale(1.2) rotate(10deg); }
+    .remove-btn:active { transform: scale(0.9); }
+
+    /* Nav active */
+    nav a[aria-current="page"] { color: #D12828; font-weight: 700; }
+    nav a:not([aria-current="page"]) { color: #333333; }
+    
+    /* Scribble Underline */
+    .scribble-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .scribble-underline::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,5 Q10,0 20,5 T40,5 T60,5 T80,5 T100,5' fill='none' stroke='%23D12828' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-b-4 border-ink pt-safe">
+  <div class="h-16 px-4 flex items-center justify-between max-w-2xl mx-auto">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded border-2 border-ink bg-white flex items-center justify-center transform -rotate-3 shadow-[2px_2px_0px_#0E2A5C]">
+        <span class="material-symbols-outlined text-accent text-[18px]">shopping_cart</span>
+      </div>
+      <span class="text-2xl font-bold text-ink tracking-tight">PriceCheck</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-base text-graphite hidden sm:block font-hand font-bold">Calculator</span>
+      <div class="w-8 h-8 rounded-full border-2 border-ink bg-white flex items-center justify-center shadow-[2px_2px_0px_#0E2A5C]">
+        <span class="material-symbols-outlined text-ink text-[18px]">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<main class="flex-1 w-full pt-24 pb-28 px-4 relative z-10">
+  <div class="flex flex-col w-full gap-6 max-w-5xl mx-auto">
+
+    <!-- Hero Banner -->
+    <div class="relative overflow-hidden bg-white border-4 border-ink rounded-[4px_12px_6px_14px] p-6 shadow-[6px_6px_0px_rgba(14,42,92,0.15)] transform -rotate-1">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-6 bg-white/70 border-x-2 border-dashed border-ink/20 transform rotate-2"></div>
+      
+      <div class="relative z-10 flex flex-col gap-2">
+        <span class="text-sm font-bold text-accent uppercase tracking-widest scribble-underline self-start mb-2">Smart Comparison</span>
+        <h1 class="text-3xl font-bold text-ink leading-tight">Unit Price Master</h1>
+        <p class="text-lg text-graphite">Add items, enter details, find the <span class="highlighter-bg bg-highlighter px-1 rounded">best deal</span> instantly.</p>
+      </div>
+    </div>
+
+    <!-- Global Unit Selector -->
+    <div class="flex items-center justify-between px-2 mt-2">
+      <span class="text-lg font-bold text-graphite">Compare all prices per:</span>
+      <select id="global-unit" class="bg-white border-2 border-ink rounded-[2px_8px_3px_6px] px-3 py-1.5 text-base font-hand font-bold outline-none focus:ring-2 focus:ring-accent text-ink shadow-[2px_2px_0px_#0E2A5C]">
+        <option value="1">1 unit (g / ml / day)</option>
+        <option value="100">100 units</option>
+        <option value="1000" selected>1000 units (1kg / 1L)</option>
+      </select>
+    </div>
+
+    <!-- Summary Bar -->
+    <div id="summary-bar" class="hidden bg-highlighter border-3 border-ink rounded-[8px_3px_10px_4px] p-4 flex items-center gap-3 shadow-[4px_4px_0px_rgba(14,42,92,0.15)] transform rotate-1 mt-2">
+      <div class="w-10 h-10 rounded-full border-2 border-ink bg-white flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_#0E2A5C]">
+        <span class="material-symbols-outlined text-accent text-[20px]">emoji_events</span>
+      </div>
+      <div>
+        <p class="text-sm text-accent font-bold uppercase tracking-wider">Best Deal</p>
+        <p id="summary-text" class="text-xl font-bold text-ink leading-tight"></p>
+      </div>
+    </div>
+
+    <!-- Items Container -->
+    <div id="items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2 items-start"></div>
+
+    <!-- Add Item Button -->
+    <button id="add-item-btn" class="add-item-btn w-full h-14 flex items-center justify-center gap-2 font-bold text-xl mt-2">
+      <span class="material-symbols-outlined text-[24px]">add_circle</span>
+      Add Item
+    </button>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 mt-4">
+      <button id="save-btn" class="btn-primary flex-1 h-14 flex items-center justify-center gap-2 font-bold text-xl">
+        <span class="material-symbols-outlined">save</span>
+        Save Comparison
+      </button>
+      <button id="reset-btn" class="btn-secondary flex-1 h-14 flex items-center justify-center gap-2 font-bold text-xl">
+        <span class="material-symbols-outlined">restart_alt</span>
+        Clear All
+      </button>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav class="fixed bottom-0 inset-x-0 z-50 bg-paper/90 backdrop-blur-md border-t-4 border-ink pb-safe">
+  <div class="flex justify-around items-center h-16 max-w-5xl mx-auto">
+    <a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-full h-full" href="#">
+      <span class="material-symbols-outlined">calculate</span>
+      <span class="text-[12px] font-bold">Calculator</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="compare.html">
+      <span class="material-symbols-outlined">compare_arrows</span>
+      <span class="text-[12px] font-bold">Compare</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="#">
+      <span class="material-symbols-outlined">barcode_scanner</span>
+      <span class="text-[12px] font-bold">Scanner</span>
+    </a>
+    <a class="flex flex-col items-center justify-center gap-1 w-full h-full text-graphite hover:text-accent transition-colors" href="#">
+      <span class="material-symbols-outlined">history</span>
+      <span class="text-[12px] font-bold">History</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════
+//  State
+// ═══════════════════════════════════════════════
+const LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let items = [];
+let nextId = 0;
+let globalUnitMultiplier = 1000;
+
+// ═══════════════════════════════════════════════
+//  Helpers
+// ═══════════════════════════════════════════════
+const UNIT_MULT = { 
+  g: 1, kg: 1000, 
+  ml: 1, L: 1000, 
+  pcs: 1, pack: 1, 
+  cm: 1, m: 100,
+  day: 1, month: 30, year: 365 
+};
+
+function getBasePrice(item) {
+  const p = parseFloat(item.price) || 0;
+  const s = parseFloat(item.size)  || 0;
+  if (p > 0 && s > 0) {
+    return p / (s * (UNIT_MULT[item.unit] || 1));
+  }
+  return 0;
+}
+
+function getDisplayInfo(item) {
+  const basePrice = getBasePrice(item);
+  if (basePrice === 0) return { val: 0, label: `Price per 1 ${item.unit}` };
+  
+  const val = basePrice * globalUnitMultiplier;
+  const isWeight = ['g', 'kg'].includes(item.unit);
+  const isVol = ['ml', 'L'].includes(item.unit);
+  const isTime = ['day', 'month', 'year'].includes(item.unit);
+  const isLength = ['cm', 'm'].includes(item.unit);
+  
+  let label = '';
+  if (globalUnitMultiplier === 1000) {
+    if (isWeight) label = 'Price per 1 kg';
+    else if (isVol) label = 'Price per 1 L';
+    else if (isTime) label = 'Price per 1000 days';
+    else if (isLength) label = 'Price per 10 m';
+    else label = `Price per 1000 ${item.unit}`;
+  } else if (globalUnitMultiplier === 100) {
+    if (isWeight) label = 'Price per 100 g';
+    else if (isVol) label = 'Price per 100 ml';
+    else if (isTime) label = 'Price per 100 days';
+    else if (isLength) label = 'Price per 1 m';
+    else label = `Price per 100 ${item.unit}`;
+  } else {
+    if (isWeight) label = 'Price per 1 g';
+    else if (isVol) label = 'Price per 1 ml';
+    else if (isTime) label = 'Price per 1 day';
+    else if (isLength) label = 'Price per 1 cm';
+    else label = `Price per 1 ${item.unit}`;
+  }
+  return { val, label };
+}
+
+function formatINR(val) {
+  if (val <= 0) return '₹0.00';
+  return '₹' + val.toFixed(2);
+}
+
+function getLabelColor(idx) {
+  const colors = [
+    { bg: 'bg-[#FFFFA5]', text: 'text-ink' },
+    { bg: 'bg-white', text: 'text-ink' },
+    { bg: 'bg-[#F4F1EA]', text: 'text-ink' },
+  ];
+  return colors[idx % colors.length];
+}
+
+// ═══════════════════════════════════════════════
+//  Render a single item card
+// ═══════════════════════════════════════════════
+function createCard(item, idx) {
+  const pal = getLabelColor(idx);
+  const canRemove = items.length > 1;
+  const rotateClass = idx % 2 === 0 ? 'rotate-1' : '-rotate-1';
+
+  const card = document.createElement('div');
+  card.className = `item-card flex flex-col p-5 card-appear transform ${rotateClass}`;
+  card.dataset.id = item.id;
+
+  card.innerHTML = `
+    <!-- Card Header -->
+    <div class="flex items-center justify-between mb-5 relative">
+      <div class="flex items-center gap-3 z-10">
+        <div class="w-10 h-10 rounded-full border-2 border-ink ${pal.bg} flex items-center justify-center font-bold text-xl ${pal.text} shadow-[2px_2px_0px_#0E2A5C]">
+          ${item.label}
+        </div>
+        <span class="font-bold text-2xl text-ink">Item ${item.label}</span>
+      </div>
+      <div class="flex items-center gap-2 z-10">
+        <span class="best-badge items-center gap-1 font-bold text-sm bg-accent text-white px-3 py-1 border-2 border-ink rounded-[4px_8px_3px_6px] shadow-[2px_2px_0px_#0E2A5C] badge-pop transform rotate-3">
+          <span class="material-symbols-outlined text-[16px]">stars</span>
+          BEST DEAL
+        </span>
+        ${canRemove ? `
+        <button class="remove-btn w-8 h-8 flex items-center justify-center ml-1" data-remove="${item.id}" title="Remove item">
+          <span class="material-symbols-outlined text-[24px]">close</span>
+        </button>` : ''}
+      </div>
+      
+      <!-- Tape effect -->
+      <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-20 h-6 bg-white/60 border-x-2 border-dashed border-ink/20 transform rotate-[-4deg]"></div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="grid grid-cols-3 gap-3 relative z-10">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-graphite font-bold">Price (₹)</label>
+        <div class="relative">
+          <span class="absolute left-2 top-1/2 -translate-y-1/2 text-ink font-mono font-bold text-base">₹</span>
+          <input
+            data-field="price" data-id="${item.id}"
+            class="calc-input w-full h-12 pl-6 pr-2 font-mono font-bold text-base outline-none focus:ring-2 focus:ring-accent"
+            type="number" inputmode="decimal" placeholder="0" step="0.01"
+            value="${item.price}"
+          />
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-graphite font-bold">Size</label>
+        <input
+          data-field="size" data-id="${item.id}"
+          class="calc-input w-full h-12 px-2 font-mono font-bold text-base outline-none focus:ring-2 focus:ring-accent"
+          type="number" inputmode="numeric" placeholder="500"
+          value="${item.size}"
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm text-graphite font-bold">Unit</label>
+        <select
+          data-field="unit" data-id="${item.id}"
+          class="calc-input w-full h-12 px-1 font-hand font-bold text-lg outline-none focus:ring-2 focus:ring-accent"
+        >
+          <optgroup label="Weight/Vol">
+            <option value="g" ${item.unit === 'g' ? 'selected' : ''}>gram (g)</option>
+            <option value="kg" ${item.unit === 'kg' ? 'selected' : ''}>kg</option>
+            <option value="ml" ${item.unit === 'ml' ? 'selected' : ''}>ml</option>
+            <option value="L" ${item.unit === 'L' ? 'selected' : ''}>liter (L)</option>
+          </optgroup>
+          <optgroup label="Time">
+            <option value="day" ${item.unit === 'day' ? 'selected' : ''}>Day</option>
+            <option value="month" ${item.unit === 'month' ? 'selected' : ''}>Month</option>
+            <option value="year" ${item.unit === 'year' ? 'selected' : ''}>Year</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="pcs" ${item.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+            <option value="pack" ${item.unit === 'pack' ? 'selected' : ''}>pack</option>
+            <option value="m" ${item.unit === 'm' ? 'selected' : ''}>meter (m)</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="mt-5 pt-3 border-t-2 border-dashed border-ink/30 relative z-10">
+      <div class="flex flex-col items-center py-1">
+        <span class="text-base text-graphite font-bold mb-1" data-unit-label="${item.id}">Price per 1 ${item.unit}</span>
+        <div class="result-val font-mono font-extrabold text-4xl tracking-tight text-ink" data-result="${item.id}">
+          ₹0.00
+        </div>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// ═══════════════════════════════════════════════
+//  Full render
+// ═══════════════════════════════════════════════
+function render() {
+  const container = document.getElementById('items-container');
+  container.innerHTML = '';
+  items.forEach((item, idx) => {
+    const card = createCard(item, idx);
+    container.appendChild(card);
+  });
+  attachInputListeners();
+  updateResults();
+}
+
+// ═══════════════════════════════════════════════
+//  Attach listeners to current inputs
+// ═══════════════════════════════════════════════
+function attachInputListeners() {
+  document.querySelectorAll('.calc-input').forEach(input => {
+    input.addEventListener('input', e => {
+      const id = parseInt(e.target.dataset.id);
+      const field = e.target.dataset.field;
+      const item = items.find(it => it.id === id);
+      if (item) item[field] = e.target.value;
+      updateResults();
+    });
+  });
+
+  document.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const id = parseInt(btn.dataset.remove);
+      removeItem(id);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  Update result displays & best-deal highlight
+// ═══════════════════════════════════════════════
+function updateResults() {
+  const values = items.map(item => {
+    const info = getDisplayInfo(item);
+    return { 
+      id: item.id, 
+      label: item.label, 
+      baseVal: getBasePrice(item),
+      displayVal: info.val,
+      displayLabel: info.label
+    };
+  });
+
+  // Update result labels
+  values.forEach(({ id, displayVal, displayLabel }) => {
+    const el = document.querySelector(`[data-result="${id}"]`);
+    if (el) el.textContent = formatINR(displayVal);
+    
+    const lbl = document.querySelector(`[data-unit-label="${id}"]`);
+    if (lbl) lbl.textContent = displayLabel;
+  });
+
+  // Find best deal (lowest non-zero base price)
+  const active = values.filter(v => v.baseVal > 0);
+  const allCards = document.querySelectorAll('.item-card');
+  allCards.forEach(c => c.classList.remove('best'));
+
+  const summaryBar = document.getElementById('summary-bar');
+  const summaryText = document.getElementById('summary-text');
+
+  if (active.length >= 2) {
+    const minVal = Math.min(...active.map(v => v.baseVal));
+    const winners = active.filter(v => v.baseVal === minVal);
+
+    winners.forEach(winner => {
+      const card = document.querySelector(`.item-card[data-id="${winner.id}"]`);
+      if (card) card.classList.add('best');
+    });
+
+    summaryBar.classList.remove('hidden');
+    summaryBar.classList.add('flex');
+    const winnerLabels = winners.map(w => `Item ${w.label}`).join(' & ');
+    
+    const savingBase = Math.max(...active.map(v => v.baseVal)) - minVal;
+    if (savingBase > 0) {
+      summaryText.textContent = `${winnerLabels} is the cheapest option!`;
+    } else {
+      summaryText.textContent = `All items have the same unit price!`;
+    }
+  } else {
+    summaryBar.classList.add('hidden');
+    summaryBar.classList.remove('flex');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  Add / Remove items
+// ═══════════════════════════════════════════════
+function addItem() {
+  const idx = items.length;
+  if (idx >= LABELS.length) return;
+  items.push({ id: nextId++, label: LABELS[idx], price: '', size: '', unit: 'g' });
+
+  // Partial re-render: just append new card
+  const container = document.getElementById('items-container');
+  const card = createCard(items[items.length - 1], idx);
+  container.appendChild(card);
+  attachInputListeners();
+
+  if (items.length === 2) render();
+  updateResults();
+
+  document.getElementById('add-item-btn').style.display = items.length >= 10 ? 'none' : '';
+}
+
+function removeItem(id) {
+  items = items.filter(it => it.id !== id);
+  items.forEach((item, idx) => { item.label = LABELS[idx]; });
+  render();
+  document.getElementById('add-item-btn').style.display = '';
+}
+
+// ═══════════════════════════════════════════════
+//  Save particle burst (with sketch colors)
+// ═══════════════════════════════════════════════
+function particleBurst(el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const colors = ['#0E2A5C', '#D12828', '#FFFFA5', '#0000FF'];
+
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    const size = 6 + Math.random() * 8;
+    p.style.cssText = `
+      position:fixed; pointer-events:none;
+      width:${size}px; height:${size}px;
+      border-radius:50%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border: 2px solid #0E2A5C;
+      left:${cx}px; top:${cy}px;
+      z-index:9999; opacity:1;
+    `;
+    document.body.appendChild(p);
+
+    const angle = (Math.PI * 2 * i) / 16 + Math.random() * 0.4;
+    const speed = 60 + Math.random() * 80;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed - 40;
+    let t = 0;
+
+    const tick = () => {
+      t += 0.018;
+      const x = cx + vx * t;
+      const y = cy + vy * t + 0.5 * 300 * t * t;
+      p.style.left = x + 'px';
+      p.style.top  = y + 'px';
+      p.style.opacity = Math.max(0, 1 - t * 2);
+      if (t < 0.6) requestAnimationFrame(tick);
+      else p.remove();
+    };
+    requestAnimationFrame(tick);
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  Init
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  items = [
+    { id: nextId++, label: 'A', price: '', size: '', unit: 'L' },
+    { id: nextId++, label: 'B', price: '', size: '', unit: 'ml' },
+  ];
+  render();
+
+  document.getElementById('global-unit').addEventListener('change', e => {
+    globalUnitMultiplier = parseInt(e.target.value);
+    updateResults();
+  });
+
+  document.getElementById('add-item-btn').addEventListener('click', addItem);
+
+  document.getElementById('save-btn').addEventListener('click', function () {
+    particleBurst(this);
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    items = [
+      { id: nextId++, label: 'A', price: '', size: '', unit: 'L' },
+      { id: nextId++, label: 'B', price: '', size: '', unit: 'ml' },
+    ];
+    render();
+    document.getElementById('add-item-btn').style.display = '';
+  });
+});
+</script>
+</body>
+</html>
